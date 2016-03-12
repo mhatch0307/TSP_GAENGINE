@@ -5,26 +5,27 @@ import java.util.List;
 import java.util.Random;
 
 import tsp.objects.Chromosome;
-import tsp.objects.Destination;
+import tsp.objects.SymmetricChromosome;
 
 public class ERXCrosser implements Crosser
 {
-
+	//Private Members
 	private float probability; 
 	private Random random;
-	int fewestNeighborsCount;
-	int fewestNeighborsIndex;
-	int neighborListSize; 
-	List<List<Integer>> neighborLists;
-	List<Integer> remainingDestinations;
+	private int neighborListSize; 
+	private List<List<Integer>> neighborLists;
+	private List<Integer> remainingDestinations;
 	
-	// Constructors
-	
+	//Constructors
 	public ERXCrosser(float probability) 
 	{
 		random = new Random();
 	}
 	
+	@Override
+	public String getDescription() { return "ERX"; }	
+	
+	//Public Methods
 	@Override
 	public Chromosome[] cross(Chromosome parent1, Chromosome parent2) throws Exception 
 	{
@@ -53,7 +54,7 @@ public class ERXCrosser implements Crosser
 			
 			//this.displayNeighborLists();
 			
-			child = new Chromosome(chromosomeSize, distanceIndex);
+			child = new SymmetricChromosome(chromosomeSize, distanceIndex);
 			
 			int destination = (random.nextInt(2) == 0)? parent1.getDestination(0) : parent2.getDestination(0);
 			
@@ -96,8 +97,7 @@ public class ERXCrosser implements Crosser
 		return child;
 	}
 	
-	//Private Mutators 
-	
+	//Private Methods
 	private void removeFromNeighborList(int destination)
 	{
 		for(int i = 0; i < this.neighborListSize; i++)
@@ -166,6 +166,8 @@ public class ERXCrosser implements Crosser
 		}
 	}
 	
+	
+	@SuppressWarnings("unused")
 	private void displayNeighborLists()
 	{
 		for (int i = 0; i < this.neighborListSize; i++)

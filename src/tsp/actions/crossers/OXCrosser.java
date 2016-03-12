@@ -3,22 +3,25 @@ package tsp.actions.crossers;
 import java.util.Random;
 
 import tsp.objects.Chromosome;
-import tsp.objects.Destination;
 
 public class OXCrosser implements Crosser
 {
-
+	//Private Memebrs
 	private float probability; 
 	private Random random;
 	
-	// Constructors
-	
+	//Constructors
 	public OXCrosser(float probability) 
 	{
 		this.probability = probability;
 		this.random = new Random();
 	}
 	
+	//Getters
+	@Override
+	public String getDescription() { return "OX"; }
+	
+	//Public Methods
 	@Override
 	/**
 	 * OX Crossover
@@ -53,6 +56,7 @@ public class OXCrosser implements Crosser
 		return new Chromosome[] {child1, child2};
 	}
 
+	//Private Methods
 	private void swapSection(Chromosome chromosome1, Chromosome chromosome2, int start, int length) throws Exception
 	{
 		int[] swapSection = chromosome1.getSubsection(start, length);

@@ -3,21 +3,26 @@ package tsp.objects;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Chromosome 
+public abstract class Chromosome 
 {
+	
+	//Private Members
+	private String description;
+	
+	//Protected Members
 	protected int[] destinations;
 	protected int currentSize;
 	protected double[][] distanceIndex;
 	protected double fitnessScore;
 	
-	// Constructors
-	
+	//Constructors
 	public Chromosome(int size, double[][] distanceIndex)
 	{
 		this.destinations = new int[size];
 		this.currentSize = 0;
 		this.distanceIndex = distanceIndex;
 		this.fitnessScore = 0;
+		this.description = "Chromosome";
 	}
 	
 	public Chromosome(int[] destinations, double[][] distanceIndex)
@@ -28,34 +33,17 @@ public class Chromosome
 		this.calculateFitnessScore();
 	}
 	
-	// Copy Method
-	public Chromosome copy()
-	{
-		Chromosome chromosome = new Chromosome(this.destinations.length, this.distanceIndex); 
-		
-		//chromosome.destinations = new int[this.destinations.length];
-		chromosome.fitnessScore = this.fitnessScore;
-		chromosome.destinations = Arrays.copyOf(this.destinations, this.destinations.length);
-		chromosome.currentSize = this.currentSize;
-		
-		/*for(int i = 0; i < this.currentSize; i++)
-		{
-			chromosome.destinations[i] = this.destinations[i];
-			chromosome.currentSize++;
-			//chromosome.fitnessScore += chromosome.destinations[i].distanceToNext + chromosome.destinations[i].distanceToPrevious;
-		}*/
-		
-		return chromosome;
-	}
+	//Copy Constrcutor
+	public abstract Chromosome copy();
 	
-	// Getters
-	
+	//Getters
 	public int getMaxSize() { return destinations.length; }
 	public int getSize() { return this.currentSize; }
 	public boolean isEmpty() { return this.currentSize == 0; }
 	public boolean isFull() { return this.currentSize == destinations.length; }
 	public double getFitnessScore() { return this.fitnessScore; }
 	public double[][] getDistanceIndex() { return this.distanceIndex; }
+	public String getDescription() { return this.description; }
 	
 	public int getDestination(int index) throws Exception
 	{
@@ -101,6 +89,7 @@ public class Chromosome
 		
 		return subSection;
 	}
+	
 	public int indexOf(int destination)
 	{
 		for (int i = 0; i < this.currentSize; i++)
@@ -124,7 +113,8 @@ public class Chromosome
 			return index2 + (this.currentSize - 1 - index1);
 	}
 	
-	// Setters
+	//Setters
+	public void setDescription(String description) { this.description = description; }
 	
 	/**
 	 * Sets the destination at the specified index if the index specified is < 
@@ -158,90 +148,9 @@ public class Chromosome
 			this.currentSize = index + 1;
 	}
 	
-	// Private Mutators
-	
-	// Used when updating an existing destination
-	private void updateDistanceScore(int destinationIndex, int oldID)
-	{
-		try
-		{
-			int previousIndex = (destinationIndex > 0)? destinationIndex - 1 : this.currentSize - 1;
-			int previousID = this.destinations[previousIndex];
-			
-			int currentID = this.destinations[destinationIndex];
-			
-			int nextIndex = (destinationIndex < this.currentSize - 1)? destinationIndex + 1 : 0;
-			int nextID = this.destinations[nextIndex];
-			
-			this.fitnessScore -= (this.distanceIndex[previousID][oldID]
-				  	//+ this.distanceIndex[oldID][previousID]
-				  	+ this.distanceIndex[oldID][nextID]);
-				  	//+ this.distanceIndex[nextID][oldID]);
-			
-			this.fitnessScore += (this.distanceIndex[previousID][currentID]
-				  	//+ this.distanceIndex[currentID][previousID]
-				  	+ this.distanceIndex[currentID][nextID]);
-				  	//+ this.distanceIndex[nextID][currentID]);
-			
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-	}
-	
-	// Used when adding a new destination
-	private void addDistanceScore(int currentIndex)
-	{
-		try
-		{
-			if(currentIndex > 0)
-			{
-				int previousID = this.destinations[currentIndex - 1];
-				int currentID = this.destinations[currentIndex];
-				int startID = this.destinations[0];
-				
-				this.fitnessScore -=// (this.distanceIndex[startID][previousID]
-									  this.distanceIndex[previousID][startID];
-									//);
-				
-				
-				this.fitnessScore += //this.distanceIndex[startID][currentID]
-							       + this.distanceIndex[currentID][startID]
-								   //+ this.distanceIndex[currentID][previousID] 
-								   + this.distanceIndex[previousID][currentID];
-			}
-			/*else if(currentIndex == 1)
-			{
-				this.fitnessScore += this.distanceIndex[this.destinations[0]][this.destinations[1]] 
-								  +	 this.distanceIndex[this.destinations[1]][this.destinations[0]]; 
-			}*/
-							  
-			
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public void calculateFitnessScore()
-	{
-		this.fitnessScore = 0;
-		for(int i = 0; i < this.currentSize; i++)
-		{
-			int currentID = this.destinations[i];
-			//int previousID = (i == 0)? this.destinations[this.currentSize - 1] : this.destinations[i - 1];
-			int nextID = (i == this.currentSize - 1)? this.destinations[0] : this.destinations[i + 1]; 
-			this.fitnessScore += (/*this.distanceIndex[currentID][previousID]*/
-								this.distanceIndex[currentID][nextID]);
-		}	
-	}
-	
-	// Public Mutators
-	
+	//Public Methods
+	public abstract void calculateFitnessScore();
+
 	/**
 	 * Adds a Destination to the population if there is room in the chromosome
 	 * 
@@ -442,19 +351,22 @@ public class Chromosome
 		
 	}
 	
-	public void display()
+	public void dispaly()
 	{
-		
-		//double verifyDistanceScore = 0;
+		System.out.println(this.description);
 		for(int i = 0; i < this.currentSize; i++)
 		{
 			System.out.print(this.destinations[i] + " ");
-			//verifyDistanceScore += (this.distanceIndex[this.destinations[i]][(i > 0)? i - 1 : this.currentSize - 1] + 
-					//this.distanceIndex[this.destinations[i]][(i < this.currentSize - 1)? i + 1 : 0]);
 		}
-		System.out.print("\nDistance Score: " + this.fitnessScore + " ");
-		//verify fitness score
-		this.calculateFitnessScore();
-		System.out.println(this.fitnessScore);
+		System.out.println("\nDistance Score: " + this.fitnessScore + "\n");
+		//this.calculateFitnessScore();
+		//System.out.println(this.fitnessScore);
 	}
+	
+	//Protected Methods
+	// Used when updating an existing destination
+	protected abstract void updateDistanceScore(int destinationIndex, int oldID);
+	
+	// Used when adding a new destination
+	protected abstract void addDistanceScore(int currentIndex);
 }

@@ -3,23 +3,25 @@ package tsp.actions.crossers;
 import java.util.Random;
 
 import tsp.objects.Chromosome;
-import tsp.objects.Destination;
 
 public class MPXCrosser implements Crosser
 {
+	//Private Members
 	private float probability; 
 	private Random random;
 	
-	// Constructors
-	
+	//Constructors
 	public	MPXCrosser(float probability) 
 	{
 		this.probability = probability;
 		this.random = new Random();
 	}
 	
-	// Mutators
+	//Getters
+	@Override
+	public String getDescription() { return "MPX"; }
 	
+	//Public Methods
 	@Override
 	public Chromosome[] cross(Chromosome parent1, Chromosome parent2) throws Exception 
 	{

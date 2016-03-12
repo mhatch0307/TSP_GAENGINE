@@ -7,13 +7,21 @@ import tsp.objects.Chromosome;
 // Selector that uses the Roulette-Wheel algorithm 
 public class RWSelector extends Selector
 {
-	Random random;
+	//Private Members
+	private Random random;
 
-	public RWSelector() {
+	//Constructors
+	public RWSelector() 
+	{
 		super();
 		this.random = new Random();
 	}
 
+	//Getters
+	@Override
+	public String getDescription() { return "RW"; }
+	
+	//Public Methods
 	@Override
 	// Use Roulette-Wheel to select a chromosome
 	public Chromosome select() 

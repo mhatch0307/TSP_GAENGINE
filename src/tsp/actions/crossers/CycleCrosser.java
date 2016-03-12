@@ -3,22 +3,28 @@ package tsp.actions.crossers;
 import java.util.Random;
 
 import tsp.objects.Chromosome;
+import tsp.objects.SymmetricChromosome;
 
 public class CycleCrosser implements Crosser
 {
+	//Private Members
 	private float probability; 
 	private Random random;
 	private Chromosome child1;
 	private Chromosome child2;
 	
-	// Constructors
-	
+	//Constructors
 	public CycleCrosser(float probability) 
 	{
 		this.probability = probability;
 		this.random = new Random();
 	}
 
+	//Getters
+	@Override
+	public String getDescription(){ return "Cycle"; }
+	
+	//Public Methods
 	@Override
 	public Chromosome[] cross(Chromosome parent1, Chromosome parent2) throws Exception 
 	{
@@ -30,8 +36,8 @@ public class CycleCrosser implements Crosser
 			int chromosomeSize = parent1.getSize();
 			double[][] distanceIndex = parent1.getDistanceIndex();
 			
-			this.child1 = new Chromosome(chromosomeSize, distanceIndex);
-			this.child2 = new Chromosome(chromosomeSize, distanceIndex);
+			this.child1 = new SymmetricChromosome(chromosomeSize, distanceIndex);
+			this.child2 = new SymmetricChromosome(chromosomeSize, distanceIndex);
 			
 			int[] cycles = new int[chromosomeSize];
 			
@@ -90,6 +96,7 @@ public class CycleCrosser implements Crosser
 		return new Chromosome[] {this.child1, this.child2};
 	}
 	
+	//Private Methods
 	private void updateDestinations(int cycleCount, int index, int parent1Destination, int parent2Destination) throws Exception
 	{
 		if(cycleCount % 2 == 1)

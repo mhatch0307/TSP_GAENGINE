@@ -6,15 +6,22 @@ import tsp.objects.Chromosome;
 
 public class ScrambleMutator implements Mutator
 {
+	//Private Members
 	private float probability;
 	private Random random;
 	
+	//Constructors
 	public ScrambleMutator(float probability)
 	{
 		this.probability = probability;
 		this.random = new Random();
 	}
 	
+	//Getters
+	@Override
+	public String getDescription() { return "Scramble"; }
+	
+	//Public Methods
 	@Override
 	public Chromosome mutate(Chromosome parent) throws Exception 
 	{

@@ -3,23 +3,26 @@ package tsp.actions.crossers;
 import java.util.Random;
 
 import tsp.objects.Chromosome;
+import tsp.objects.SymmetricChromosome;
 
 public class RingCrosser implements Crosser
 {
-
+	//Private Memebers
 	private float probability; 
 	private Random random;
-	private Chromosome child1;
-	private Chromosome child2;
 	
-	// Constructors
-	
+	//Constructors
 	public RingCrosser(float probability) 
 	{
 		this.probability = probability;
 		this.random = new Random();
 	}
 	
+	//Getters
+	@Override
+	public String getDescription() { return "Ring"; }
+	
+	//Public Methods
 	@Override
 	public Chromosome[] cross(Chromosome parent1, Chromosome parent2) throws Exception 
 	{		
@@ -38,8 +41,8 @@ public class RingCrosser implements Crosser
 			int cutPoint1 = this.random.nextInt(p1Size);
 			int cutPoint2 = cutPoint1 + p1Size;
 			
-			child1 = new Chromosome(combinedChromosome.getSubsection(cutPoint1, p1Size), distanceIndex);
-			child2 = new Chromosome(combinedChromosome.getSubsectionReverse(cutPoint2, p1Size), distanceIndex);
+			child1 = new SymmetricChromosome(combinedChromosome.getSubsection(cutPoint1, p1Size), distanceIndex);
+			child2 = new SymmetricChromosome(combinedChromosome.getSubsectionReverse(cutPoint2, p1Size), distanceIndex);
 			
 			//combinedChromosome.display();
 		
@@ -60,6 +63,7 @@ public class RingCrosser implements Crosser
 		return new Chromosome[] {child1, child2};
 	}
 	
+	//Private Methods
 	private Chromosome combine(Chromosome parent1, Chromosome parent2) throws Exception
 	{
 		
@@ -69,7 +73,7 @@ public class RingCrosser implements Crosser
 		
 		double[][] distanceIndex = parent1.getDistanceIndex();
 		
-		Chromosome combinedChromosome = new Chromosome(combinedSize, distanceIndex);
+		Chromosome combinedChromosome = new SymmetricChromosome(combinedSize, distanceIndex);
 		
 		for(int i = 0; i < p1Size; i++)
 			combinedChromosome.addDestination(parent1.getDestination(i));

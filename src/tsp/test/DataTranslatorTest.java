@@ -6,6 +6,7 @@ import tsp.actions.crossers.ERXCrosser;
 import tsp.actions.crossers.RingCrosser;
 import tsp.actions.mutators.SwapMutator;
 import tsp.actions.selectors.RWSelector;
+import tsp.objects.GA;
 import tsp.objects.Population;
 
 
@@ -86,14 +87,15 @@ public class DataTranslatorTest
 			
 			//child.display();
 			
-			Population population1 = DataConverter.createRandomPopulation(distanceIndex, 100, new RingCrosser((float) .8), new SwapMutator((float) .2), new RWSelector());
-			Population population2 = DataConverter.createRandomPopulation(distanceIndex, 100, new ERXCrosser((float) .8), new SwapMutator((float) .2), new RWSelector());
+			Population population1 = DataConverter.createRandomPopulation(distanceIndex, 100, new RingCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);
+			Population population2 = DataConverter.createRandomPopulation(distanceIndex, 100, new ERXCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);
+			GA ga1 = new GA(population1, 1000);
+			GA ga2 = new GA(population2, 1000);
 			
+			TSPEngine.addToQueue(ga1);
+			TSPEngine.addToQueue(ga2);
 			
-			TSPEngine.addToQueue(population1);
-			TSPEngine.addToQueue(population2);
-			
-			TSPEngine.run();
+			TSPEngine.getInstance().run();
 			
 			//GA ga1 = new GA(population, 100000);
 			

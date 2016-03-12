@@ -1,42 +1,31 @@
 package tsp.objects;
 
 import tsp.actions.TSPEngine;
-import tsp.actions.crossers.Crosser;
-import tsp.actions.mutators.Mutator;
 
 public class GA extends Thread
 {
+	//Private Members
 	private Population population;
-	
-	// the difference between the a previous and current distnace score that must be reached to stop
-	private float changeStopCriteria;
-	// the number of consecutive iterations with changeStopCriteria reached
-	private int numIterationsStopCriteria;
-	// the maximum number of iterations for the algorithm
-	private int maxIterations;
-	//
 	private Chromosome mostOptimalChromosome;
+	private int endCriteria;
 	
-	
-	public GA(Population population, float changeStopCriteria)
+	//Constructors
+	public GA(Population population, int endCriteria)
 	{
 		this.population = population;
-		this.changeStopCriteria = changeStopCriteria;
-		//this.numIterationsStopCriteria = numIterationsStopCriteria;
-		//this.maxIterations = maxIterations;
+		this.endCriteria = endCriteria;
 	}
 	
 	//Getters
 	public Population getPopulation() { return this.population; }
 	
+	//Public Methods
 	public void run()
 	{
-		System.out.println("Running GA");
 		this.mostOptimalChromosome = this.population.getMostOptimalMember();
 		int numIterations = 0;
-		//int numConsMinDiff = 0;
 		
-		while(numIterations < this.changeStopCriteria && this.population.getSize() > 2)
+		while(numIterations < this.endCriteria && this.population.getSize() > 2)
 		{
 			try {
 				this.population.generateOffSpring();
@@ -52,16 +41,19 @@ public class GA extends Thread
 				this.mostOptimalChromosome = newMostOptimal;
 			else
 				numIterations++;
-
-			//this.mostOptimalChromosome.display();
 		}
 		this.sendMostOptimalSolution();
 		//System.out.println(numIterations);
 	}
 	
+	//Private Methods
 	private void sendMostOptimalSolution()
 	{
-		TSPEngine.getInstance().returnSolution(this.mostOptimalChromosome);
+		this.mostOptimalChromosome.setDescription("Crosser: " + this.population.getCrosserDescription()
+												+ "\nMutator: " + this.population.getMutatorDescription() 
+												+ "\nSelector: " + this.population.getSelectorDescription()
+												+ "\nPopulation Size: " + this.population.getSize() 
+												+ "\nEnd Criteria: " + this.endCriteria);
+		TSPEngine.getInstance().returnSolution(this.mostOptimalChromosome, this.population.getInterfaceID());
 	}
-	
 }

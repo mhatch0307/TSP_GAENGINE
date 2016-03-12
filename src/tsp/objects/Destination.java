@@ -2,6 +2,7 @@ package tsp.objects;
 
 public class Destination 
 {
+	//Protected Members
 	protected int ID;
 	protected String description;
 	protected double distanceToNext;
@@ -9,8 +10,7 @@ public class Destination
 	protected double xPos;
 	protected double yPos;
 	
-	//CONSTRUCTORS
-	
+	//Constrcutors
 	public Destination(int ID, String description, double distanceToNext, double distanceToPrevious, double xPos, double yPos)
 	{
 		this.description = description;
@@ -28,24 +28,22 @@ public class Destination
 		this.xPos = 0;
 		this.yPos = 0;
 	}
-	
-	//SETTERS
-	
-	public void setID(int ID) { this.ID = ID; }
-	public void setdescription(String description) { this.description = description; }
-	public void setDistanceToNext(int distanceToNext) { this.distanceToNext = distanceToNext; }
-	public void setDistanceToPrevious(int distanceToPrevious) { this.distanceToPrevious = distanceToPrevious; }
-	public void setXPos(double xPos) { this.xPos = xPos; }
-	public void setYPos(double yPos) { this.yPos = yPos; }
-	
-	//GETTERS
-	
+		
+	//Getters
 	public String getDescription() { return this.description; }
 	public int getID() { return this.ID; }
 	public double getDistanceToNext() { return this.distanceToNext; }
 	public double getDistanceToPrevious() { return this.distanceToPrevious; }
 	public double getXPos() { return this.xPos; }
 	public double getYPos() { return this.yPos; }
+	
+	//Setters
+	public void setID(int ID) { this.ID = ID; }
+	public void setdescription(String description) { this.description = description; }
+	public void setDistanceToNext(int distanceToNext) { this.distanceToNext = distanceToNext; }
+	public void setDistanceToPrevious(int distanceToPrevious) { this.distanceToPrevious = distanceToPrevious; }
+	public void setXPos(double xPos) { this.xPos = xPos; }
+	public void setYPos(double yPos) { this.yPos = yPos; }
 	
 	public Destination copy()
 	{

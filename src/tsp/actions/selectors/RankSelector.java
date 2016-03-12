@@ -1,16 +1,21 @@
 package tsp.actions.selectors;
 
-import java.util.Random;
-
 import tsp.objects.Chromosome;
 
 public class RankSelector extends Selector 
 {
-
-	public RankSelector() {
+	
+	//Constructors
+	public RankSelector() 
+	{
 		super();
 	}
 	
+	//Getters
+	@Override
+	public String getDescription() { return "Rank"; }
+	
+	//Public Methods
 	public Chromosome select()
 	{
 		double mostOptimalIndexScore = 999999;

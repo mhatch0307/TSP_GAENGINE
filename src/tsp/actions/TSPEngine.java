@@ -3,28 +3,23 @@ package tsp.actions;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import tsp.controllers.TSPController;
 import tsp.objects.Chromosome;
 import tsp.objects.GA;
-import tsp.objects.Population;
 
-public class TSPEngine 
+public class TSPEngine extends Thread
 {
+	//Private Memebrs
 	private static int maxThreads = 5;
-	
 	private static TSPEngine instance = null;
-	
-	private static Queue<Population> populationQueue = new LinkedBlockingQueue<Population>();
-	
-	private static boolean stop = false;
-	
+	private static Queue<GA> GAQueue = new LinkedBlockingQueue<GA>();
+	private static boolean run = false;
 	private static int numRunning = 0;
 	
-	private static int endCriteria = 0;
+	//Contructors
+	protected TSPEngine() { }
 	
-	protected TSPEngine(){
-	
-	}
-	
+	//Getters
 	public static TSPEngine getInstance()
 	{
 		if(instance == null){
@@ -33,42 +28,45 @@ public class TSPEngine
 		return instance;
 	}
 	
-	public static void addToQueue(Population population)
+	public static boolean isRunning() { return TSPEngine.run; }
+	
+	//Setters
+	public static void addToQueue(GA ga)
 	{
-		populationQueue.offer(population);
+		GAQueue.offer(ga);
 	}
 	
-	public static void setEndCriteria(int endCriteria)
+	//Public Methods
+	public void returnSolution(Chromosome solution, int userInterfaceID)
 	{
-		TSPEngine.endCriteria = endCriteria;
-	}
-	
-	public void returnSolution(Chromosome solution)
-	{
-		solution.display();
+		TSPController.getInstance().sendSolutionToUserInterface(solution, userInterfaceID);
 		TSPEngine.numRunning--;
 	}
 
-	public static void stop()
+	public void stopEngine()
 	{
-		System.out.println(TSPEngine.stop);
-		TSPEngine.stop = true;
+		TSPEngine.run = false;
+		//System.out.println("Engine Stopped\n");
 	}
 	
-	public static void run()
+	public void startEngine()
 	{
-		TSPEngine.stop = false;
+		if(!this.isAlive()) this.start();
+		TSPEngine.run = true;
+		//System.out.println("Engine Started\n");
+	}
+	
+	public void run()
+	{
+		TSPEngine.run = true;
 		
-		System.out.println("Running Engine");
-		
-		while(!TSPEngine.stop)
+		while(TSPEngine.run)
 		{
-			if(TSPEngine.numRunning < TSPEngine.maxThreads && !TSPEngine.populationQueue.isEmpty())
+			if(TSPEngine.numRunning < TSPEngine.maxThreads && !TSPEngine.GAQueue.isEmpty())
 			{
-				GA ga = new GA(TSPEngine.populationQueue.remove(), TSPEngine.endCriteria);
+				GA ga = TSPEngine.GAQueue.remove();
 				ga.start();
 				TSPEngine.numRunning++;
-				System.out.println("Num Running: " + numRunning);
 			}
 		}
 	}

@@ -6,20 +6,20 @@ import tsp.objects.Chromosome;
 
 public abstract class Selector 
 {
-	List<Chromosome> chromosomes;
-	double totalFitnessScore;
-	int numChromosomes;
+	//Private Members
+	protected List<Chromosome> chromosomes;
+	protected double totalFitnessScore;
+	protected int numChromosomes;
 	
 	//Constructors
-	
 	public Selector()
 	{
 		this.totalFitnessScore = 0;
 	}
 	
 	//Getters
-	
 	public int getNumChromosomes() { return this.numChromosomes; }
+	public abstract String getDescription();
 	
 	//Setters
 	public void setChromosomes(List<Chromosome> chromosomes) 
@@ -29,7 +29,7 @@ public abstract class Selector
 		this.sumFitnessValues();
 	}
 
-	// Mutators
+	//Public Methods
 	public abstract Chromosome select();
 	
 	public void sumFitnessValues()

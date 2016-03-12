@@ -6,16 +6,22 @@ import tsp.objects.Chromosome;
 
 public class SwapMutator implements Mutator
 {
-	
+	//Private Members
 	private float probability;
 	private Random random;
 	
+	//Constructors
 	public SwapMutator(float probability)
 	{
 		this.probability = probability;
 		this.random = new Random();
 	}
 	
+	//Getters
+	@Override
+	public String getDescription() { return "Swap"; }
+	
+	//Public Methods
 	@Override
 	public Chromosome mutate(Chromosome parent) throws Exception 
 	{
@@ -35,5 +41,4 @@ public class SwapMutator implements Mutator
 		}
 		return child;
 	}
-
 }

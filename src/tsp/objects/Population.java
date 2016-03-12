@@ -9,17 +9,18 @@ import tsp.actions.selectors.Selector;
 
 public class Population 
 {
+	//Private Memebers
 	private Chromosome[] chromosomes;
 	private Crosser crosser;
 	private Mutator mutator;
 	private Selector selector;
 	private int mostOptimalMemberIndex;
 	private int secondMostOptimalMemberIndex;
-	int currentSize;
+	private int interfaceID;
+	private int currentSize;
 	
-	// Constructors
-	
-	public Population(int maxSize, Crosser crosser, Mutator mutator, Selector selector)
+	//Constructors
+	public Population(int maxSize, Crosser crosser, Mutator mutator, Selector selector, int interfaceID)
 	{
 		this.chromosomes = new Chromosome[maxSize];
 		this.currentSize = 0;
@@ -28,14 +29,18 @@ public class Population
 		this.selector = selector;
 		this.mostOptimalMemberIndex = 0;
 		this.secondMostOptimalMemberIndex = 0;
+		this.interfaceID = interfaceID;
 	}
 	
-	// Getters 
-	
+	//Getters 
 	public int getMaxSize() { return chromosomes.length; }
 	public int getSize() { return this.currentSize; }
 	public boolean isEmpty() { return this.currentSize == 0; }
 	public boolean isFull() { return this.currentSize == chromosomes.length; }
+	public int getInterfaceID() { return this.interfaceID; }
+	public String getCrosserDescription() { return this.crosser.getDescription(); }
+	public String getMutatorDescription() { return this.mutator.getDescription(); }
+	public String getSelectorDescription() { return this.selector.getDescription(); }
 	
 	public Chromosome getChromosome(int index) throws Exception
 	{
@@ -49,8 +54,7 @@ public class Population
 		return this.chromosomes[this.mostOptimalMemberIndex];
 	}
 	
-	// Setters
-	
+	//Setters
 	/**
 	 * Sets the Chromsome at the specified index if the index specified is < 
 	 * this.currentSize
@@ -77,8 +81,7 @@ public class Population
 		this.findMostOptimalChromosome();
 	}
 	
-	// Mutators
-	
+	//Publci Methods
 	/**
 	 * Adds a Chromosome to the population. If there is room in the population
 	 * 
@@ -109,22 +112,6 @@ public class Population
 	}
 	
 	/**
-	 * Finds the most optimal chromosome
-	 */
-	private void findMostOptimalChromosome()
-	{
-		double mostOptimalFitnessScore = 999999999;
-		for(int i = 0; i < this.currentSize; i++)
-		{
-			if(this.chromosomes[i].fitnessScore < mostOptimalFitnessScore)
-			{
-				this.secondMostOptimalMemberIndex = this.mostOptimalMemberIndex;
-				this.mostOptimalMemberIndex = i;
-			}
-		}
-	}
-	
-	/**
 	 * Generate the next population
 	 * @throws Exception 
 	 */
@@ -146,8 +133,6 @@ public class Population
 		if(this.currentSize % 2 == 0)
 		{
 			newPopulation[chromosomeIndex++] = this.chromosomes[this.secondMostOptimalMemberIndex]; // keep second most optimal
-			
-			//this.selector.remove(this.secondMostOptimalMemberIndex); // remove the most optimal from the pool
 		}
 		
 		double mostOptimalFitnessScore = 999999999;
@@ -171,5 +156,22 @@ public class Population
 			}
 		}
 		this.chromosomes = newPopulation;
+	}
+	
+	//Private Methods
+	/**
+	 * Finds the most optimal chromosome
+	 */
+	private void findMostOptimalChromosome()
+	{
+		double mostOptimalFitnessScore = 999999999;
+		for(int i = 0; i < this.currentSize; i++)
+		{
+			if(this.chromosomes[i].fitnessScore < mostOptimalFitnessScore)
+			{
+				this.secondMostOptimalMemberIndex = this.mostOptimalMemberIndex;
+				this.mostOptimalMemberIndex = i;
+			}
+		}
 	}
 }

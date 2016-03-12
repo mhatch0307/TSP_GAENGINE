@@ -1,5 +1,6 @@
 package tsp.views;
 
-public interface TSPDisplay {
+public interface TSPDisplay
+{
 
 }

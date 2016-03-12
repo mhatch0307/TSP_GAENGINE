@@ -10,14 +10,12 @@ import java.util.Random;
 import com.mxgraph.view.mxGraph;
 
 import tsp.actions.crossers.Crosser;
-import tsp.actions.crossers.RingCrosser;
 import tsp.actions.mutators.Mutator;
-import tsp.actions.mutators.SwapMutator;
-import tsp.actions.selectors.RankSelector;
 import tsp.actions.selectors.Selector;
 import tsp.objects.Chromosome;
 import tsp.objects.Destination;
 import tsp.objects.Population;
+import tsp.objects.SymmetricChromosome;
 
 
 public class DataConverter 
@@ -34,6 +32,7 @@ public class DataConverter
 	 */
 	public static double[][] XMLToDistanceIndex(String XMLFilePath) throws Exception
 	{
+		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(XMLFilePath));
 		
 		// Find TSP size, distance precision
@@ -104,6 +103,8 @@ public class DataConverter
 			throw new Exception("Invalid File! " + e.getMessage());
 		}
 	
+		reader.close();
+		
 		if(vertexIndex != size - 1)
 			throw new Exception ("Invalid File! Only " + (vertexIndex + 1) + " valid vertices found out of " + (size + 1));
 		
@@ -123,10 +124,8 @@ public class DataConverter
 	public static mxGraph ChromosomeToGraph(Chromosome chromosome)
 	{
 		mxGraph graph = new mxGraph();
-		
-		
-		
-		return null;
+	
+		return graph;
 	}
 	
 	/*public static mxGraph XMLToGraph(String XML)
@@ -146,9 +145,9 @@ public class DataConverter
 		return 0;
 	}
 	
-	public static Population createRandomPopulation(double[][] distanceIndex, int size, Crosser crosser, Mutator mutator, Selector selector) throws Exception
+	public static Population createRandomPopulation(double[][] distanceIndex, int size, Crosser crosser, Mutator mutator, Selector selector, int interfaceID) throws Exception
 	{
-		Population population = new Population(size, crosser, mutator, selector);
+		Population population = new Population(size, crosser, mutator, selector, interfaceID);
 		
 		for(int i = 0; i < size; i++)
 		{
@@ -165,7 +164,7 @@ public class DataConverter
 		for(int i = 0; i < distanceIndex.length; i++)
 			indicies.add(i);
 		
-		Chromosome chromosome = new Chromosome(distanceIndex.length, distanceIndex);
+		Chromosome chromosome = new SymmetricChromosome(distanceIndex.length, distanceIndex);
 		
 		int size = distanceIndex.length;
 		
