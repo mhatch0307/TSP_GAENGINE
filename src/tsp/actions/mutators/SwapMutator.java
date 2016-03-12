@@ -2,7 +2,7 @@ package tsp.actions.mutators;
 
 import java.util.Random;
 
-import tsp.objects.Chromosome;
+import tsp.objects.chromosomes.Chromosome;
 
 public class SwapMutator implements Mutator
 {

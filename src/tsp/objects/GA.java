@@ -1,6 +1,8 @@
 package tsp.objects;
 
 import tsp.actions.TSPEngine;
+import tsp.objects.chromosomes.Chromosome;
+import tsp.objects.populations.Population;
 
 public class GA extends Thread
 {

@@ -2,8 +2,9 @@ package tsp.actions.crossers;
 
 import java.util.Random;
 
-import tsp.objects.Chromosome;
-import tsp.objects.SymmetricChromosome;
+import tsp.actions.DataFactory;
+import tsp.objects.chromosomes.Chromosome;
+import tsp.objects.chromosomes.SymmetricChromosome;
 
 public class RingCrosser implements Crosser
 {
@@ -60,7 +61,12 @@ public class RingCrosser implements Crosser
 		//child1.display();
 		//child2.display();
 		
-		return new Chromosome[] {child1, child2};
+		Chromosome children[] = DataFactory.createNewChromosomeArray(parent1.populationType, 2);
+		
+		children[0] = child1;
+		children[1] = child2;
+		
+		return children;
 	}
 	
 	//Private Methods

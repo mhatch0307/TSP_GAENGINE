@@ -3,14 +3,15 @@ package tsp.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-import tsp.actions.DataConverter;
+import tsp.actions.DataFactory;
 import tsp.actions.TSPEngine;
 import tsp.actions.crossers.Crosser;
 import tsp.actions.mutators.Mutator;
 import tsp.actions.selectors.Selector;
-import tsp.objects.Chromosome;
 import tsp.objects.GA;
-import tsp.objects.Population;
+import tsp.objects.chromosomes.Chromosome;
+import tsp.objects.populations.Population;
+import tsp.objects.populations.PopulationType;
 import tsp.views.UserInterface;
 
 public class TSPController 
@@ -67,15 +68,28 @@ public class TSPController
 		userInterface.displayMessage("Optimal solution has been found!");
 	}
 	
-	public void addToQueue(double[][] distanceIndex, int size, int endCriteria, Crosser crosser, Mutator mutator, Selector selector, int interfaceID)
+	public void addToQueue(double[][] distanceIndex, int size, int endCriteria, Crosser crosser, Mutator mutator, Selector selector, int populationType, int interfaceID)
 	{
 		Population population;
-		try {
-			population = DataConverter.createRandomPopulation(distanceIndex, size, crosser, mutator, selector, interfaceID);
+		try 
+		{
+			switch(populationType)
+			{
+				case PopulationType.Symmetric:
+					population = DataFactory.createRandomSymmetricPopulation(distanceIndex, size, crosser, mutator, selector, interfaceID);
+					break;
+				case PopulationType.Asymmetric:
+					population = DataFactory.createRandomAsymmetricPopulation(distanceIndex, size, crosser, mutator, selector, interfaceID);
+					break;
+				default:
+					throw new Exception("Invalid Population Type!");
+			}
 			GA ga = new GA(population, endCriteria);
 			TSPEngine.addToQueue(ga);
 			this.userInterfaces.get(interfaceID).displayMessage("Population added successfully!");
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			String message = e.getMessage();

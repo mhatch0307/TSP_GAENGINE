@@ -1,10 +1,12 @@
-package tsp.objects;
+package tsp.objects.chromosomes;
 
 import java.util.Arrays;
 import java.util.Random;
 
 public abstract class Chromosome 
 {
+	//Public Members
+	public int populationType;
 	
 	//Private Members
 	private String description;

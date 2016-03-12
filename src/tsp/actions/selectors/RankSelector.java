@@ -1,6 +1,6 @@
 package tsp.actions.selectors;
 
-import tsp.objects.Chromosome;
+import tsp.objects.chromosomes.Chromosome;
 
 public class RankSelector extends Selector 
 {

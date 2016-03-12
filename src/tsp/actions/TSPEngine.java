@@ -4,8 +4,8 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import tsp.controllers.TSPController;
-import tsp.objects.Chromosome;
 import tsp.objects.GA;
+import tsp.objects.chromosomes.Chromosome;
 
 public class TSPEngine extends Thread
 {

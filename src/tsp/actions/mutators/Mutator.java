@@ -1,6 +1,6 @@
 package tsp.actions.mutators;
 
-import tsp.objects.Chromosome;
+import tsp.objects.chromosomes.Chromosome;
 
 public interface Mutator 
 {

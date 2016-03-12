@@ -1,20 +1,22 @@
-package tsp.objects;
+package tsp.objects.chromosomes;
 
 import java.util.Arrays;
 
+import tsp.objects.populations.PopulationType;
+
 public class AsymmetricChromosome extends Chromosome
 {
-
 	//Construcctor
 	public AsymmetricChromosome(int size, double[][] distanceIndex) 
 	{
 		super(size, distanceIndex);
-		// TODO Auto-generated constructor stub
+		this.populationType = PopulationType.Asymmetric;
 	}
 	
 	public AsymmetricChromosome(int[] destinations, double[][] distanceIndex)
 	{
 		super(destinations, distanceIndex);
+		this.populationType = PopulationType.Asymmetric;
 	}
 	
 	//Copy Constructor

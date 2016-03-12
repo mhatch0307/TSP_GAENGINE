@@ -1,13 +1,13 @@
 package tsp.test;
 
-import tsp.actions.DataConverter;
+import tsp.actions.DataFactory;
 import tsp.actions.TSPEngine;
 import tsp.actions.crossers.ERXCrosser;
 import tsp.actions.crossers.RingCrosser;
 import tsp.actions.mutators.SwapMutator;
 import tsp.actions.selectors.RWSelector;
 import tsp.objects.GA;
-import tsp.objects.Population;
+import tsp.objects.populations.Population;
 
 
 public class DataTranslatorTest 
@@ -26,7 +26,7 @@ public class DataTranslatorTest
 		double[][] distanceIndex;
 		
 		try {
-			distanceIndex = DataConverter.XMLToDistanceIndex(filePath);
+			distanceIndex = DataFactory.XMLToDistanceIndex(filePath);
 			
 			/*for (int i = 0; i < distanceIndex.length; i++)
 			{
@@ -87,8 +87,8 @@ public class DataTranslatorTest
 			
 			//child.display();
 			
-			Population population1 = DataConverter.createRandomPopulation(distanceIndex, 100, new RingCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);
-			Population population2 = DataConverter.createRandomPopulation(distanceIndex, 100, new ERXCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);
+			Population population1 = DataFactory.createRandomSymmetricPopulation(distanceIndex, 100, new RingCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);
+			Population population2 = DataFactory.createRandomSymmetricPopulation(distanceIndex, 100, new ERXCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);
 			GA ga1 = new GA(population1, 1000);
 			GA ga2 = new GA(population2, 1000);
 			

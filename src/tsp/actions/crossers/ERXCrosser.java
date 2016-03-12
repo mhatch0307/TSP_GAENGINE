@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import tsp.objects.Chromosome;
-import tsp.objects.SymmetricChromosome;
+import tsp.actions.DataFactory;
+import tsp.objects.chromosomes.Chromosome;
 
 public class ERXCrosser implements Crosser
 {
@@ -29,9 +29,12 @@ public class ERXCrosser implements Crosser
 	@Override
 	public Chromosome[] cross(Chromosome parent1, Chromosome parent2) throws Exception 
 	{
+		Chromosome children[] = DataFactory.createNewChromosomeArray(parent1.populationType, 2);
 		
+		children[0] = this.runIteration(parent1, parent2);
+		children[1] = this.runIteration(parent1, parent2);
 		
-		return new Chromosome[] {this.runIteration(parent1, parent2), this.runIteration(parent1, parent2)};
+		return children;
 	}
 	
 	private Chromosome runIteration(Chromosome parent1, Chromosome parent2) throws Exception 
@@ -54,7 +57,7 @@ public class ERXCrosser implements Crosser
 			
 			//this.displayNeighborLists();
 			
-			child = new SymmetricChromosome(chromosomeSize, distanceIndex);
+			child = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex);
 			
 			int destination = (random.nextInt(2) == 0)? parent1.getDestination(0) : parent2.getDestination(0);
 			

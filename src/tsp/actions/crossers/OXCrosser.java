@@ -2,7 +2,8 @@ package tsp.actions.crossers;
 
 import java.util.Random;
 
-import tsp.objects.Chromosome;
+import tsp.actions.DataFactory;
+import tsp.objects.chromosomes.Chromosome;
 
 public class OXCrosser implements Crosser
 {
@@ -53,7 +54,12 @@ public class OXCrosser implements Crosser
 		//System.out.print("Child 1 After: "); child1.display();
 		//System.out.print("Child 2 After: "); child2.display();
 		
-		return new Chromosome[] {child1, child2};
+		Chromosome children[] = DataFactory.createNewChromosomeArray(parent1.populationType, 2);
+		
+		children[0] = child1;
+		children[1] = child2;
+		
+		return children;
 	}
 
 	//Private Methods

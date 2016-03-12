@@ -1,15 +1,18 @@
-package tsp.objects;
+package tsp.objects.populations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import tsp.actions.DataFactory;
 import tsp.actions.crossers.Crosser;
 import tsp.actions.mutators.Mutator;
 import tsp.actions.selectors.Selector;
+import tsp.objects.chromosomes.Chromosome;
 
 public class Population 
 {
-	//Private Memebers
+	//Private Members
+	private int populationType;
 	private Chromosome[] chromosomes;
 	private Crosser crosser;
 	private Mutator mutator;
@@ -20,9 +23,8 @@ public class Population
 	private int currentSize;
 	
 	//Constructors
-	public Population(int maxSize, Crosser crosser, Mutator mutator, Selector selector, int interfaceID)
+	public Population(int maxSize, Crosser crosser, Mutator mutator, Selector selector, int populationType, int interfaceID)
 	{
-		this.chromosomes = new Chromosome[maxSize];
 		this.currentSize = 0;
 		this.crosser = crosser;
 		this.mutator = mutator;
@@ -30,6 +32,13 @@ public class Population
 		this.mostOptimalMemberIndex = 0;
 		this.secondMostOptimalMemberIndex = 0;
 		this.interfaceID = interfaceID;
+		this.populationType = populationType;
+		try {
+			this.chromosomes = DataFactory.createNewChromosomeArray(this.populationType, maxSize);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	//Getters 
@@ -41,6 +50,7 @@ public class Population
 	public String getCrosserDescription() { return this.crosser.getDescription(); }
 	public String getMutatorDescription() { return this.mutator.getDescription(); }
 	public String getSelectorDescription() { return this.selector.getDescription(); }
+	public int getPopulationType() { return this.populationType; }
 	
 	public Chromosome getChromosome(int index) throws Exception
 	{
@@ -94,7 +104,7 @@ public class Population
 			throw new Exception("The maximum population has been reached!");
 		
 		this.chromosomes[currentSize] = chromosome;
-		if(chromosome.fitnessScore < this.chromosomes[this.mostOptimalMemberIndex].getFitnessScore())
+		if(chromosome.getFitnessScore() < this.chromosomes[this.mostOptimalMemberIndex].getFitnessScore())
 		{
 			this.secondMostOptimalMemberIndex = this.mostOptimalMemberIndex;
 			this.mostOptimalMemberIndex = currentSize;
@@ -112,7 +122,7 @@ public class Population
 	}
 	
 	/**
-	 * Generate the next population
+	 * Generate the next stymmetric population
 	 * @throws Exception 
 	 */
 	public void generateOffSpring() throws Exception
@@ -120,15 +130,14 @@ public class Population
 		
 		//System.out.println(this.chromosomes.length);
 		
-		Chromosome selectChromosomes[] = new Chromosome[this.chromosomes.length];
+		Chromosome selectChromosomes[] = DataFactory.createNewChromosomeArray(this.populationType, this.chromosomes.length);
 		System.arraycopy(this.chromosomes, 0, selectChromosomes, 0, this.chromosomes.length);
 		this.selector.setChromosomes(new ArrayList<Chromosome>(Arrays.asList(this.chromosomes)));
 		
-		Chromosome[] newPopulation = new Chromosome[this.chromosomes.length];
+		Chromosome[] newPopulation = DataFactory.createNewChromosomeArray(this.populationType, this.chromosomes.length);
 		
 		int chromosomeIndex = 0;
 		newPopulation[chromosomeIndex++] = this.chromosomes[this.mostOptimalMemberIndex]; // always keep most optimal member
-		//this.selector.remove(this.mostOptimalMemberIndex); // remove the most optimal from the pool
 		
 		if(this.currentSize % 2 == 0)
 		{
@@ -146,9 +155,9 @@ public class Population
 			for(int j = 0; j < children.length && chromosomeIndex < this.currentSize; j++)
 			{
 				Chromosome child = this.mutator.mutate(children[j]);
-				if(child.fitnessScore < mostOptimalFitnessScore)
+				if(child.getFitnessScore() < mostOptimalFitnessScore)
 				{
-					mostOptimalFitnessScore = child.fitnessScore;
+					mostOptimalFitnessScore = child.getFitnessScore();
 					this.secondMostOptimalMemberIndex = this.mostOptimalMemberIndex;
 					this.mostOptimalMemberIndex = chromosomeIndex;
 				}
@@ -167,7 +176,7 @@ public class Population
 		double mostOptimalFitnessScore = 999999999;
 		for(int i = 0; i < this.currentSize; i++)
 		{
-			if(this.chromosomes[i].fitnessScore < mostOptimalFitnessScore)
+			if(this.chromosomes[i].getFitnessScore() < mostOptimalFitnessScore)
 			{
 				this.secondMostOptimalMemberIndex = this.mostOptimalMemberIndex;
 				this.mostOptimalMemberIndex = i;

@@ -2,7 +2,7 @@ package tsp.actions.selectors;
 
 import java.util.Random;
 
-import tsp.objects.Chromosome;
+import tsp.objects.chromosomes.Chromosome;
 
 // Selector that uses the Roulette-Wheel algorithm 
 public class RWSelector extends Selector

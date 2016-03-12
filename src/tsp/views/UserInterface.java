@@ -2,7 +2,7 @@ package tsp.views;
 
 import java.util.List;
 
-import tsp.objects.Chromosome;
+import tsp.objects.chromosomes.Chromosome;
 
 public abstract class UserInterface extends Thread
 {

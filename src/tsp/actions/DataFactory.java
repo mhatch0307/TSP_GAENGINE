@@ -12,13 +12,14 @@ import com.mxgraph.view.mxGraph;
 import tsp.actions.crossers.Crosser;
 import tsp.actions.mutators.Mutator;
 import tsp.actions.selectors.Selector;
-import tsp.objects.Chromosome;
 import tsp.objects.Destination;
-import tsp.objects.Population;
-import tsp.objects.SymmetricChromosome;
+import tsp.objects.chromosomes.AsymmetricChromosome;
+import tsp.objects.chromosomes.Chromosome;
+import tsp.objects.chromosomes.SymmetricChromosome;
+import tsp.objects.populations.Population;
+import tsp.objects.populations.PopulationType;
 
-
-public class DataConverter 
+public class DataFactory 
 {
 	
 	//Data Processing Functions
@@ -145,27 +146,51 @@ public class DataConverter
 		return 0;
 	}
 	
-	public static Population createRandomPopulation(double[][] distanceIndex, int size, Crosser crosser, Mutator mutator, Selector selector, int interfaceID) throws Exception
+	public static Population createRandomSymmetricPopulation(double[][] distanceIndex, int size, Crosser crosser, Mutator mutator, Selector selector, int interfaceID) throws Exception
 	{
-		Population population = new Population(size, crosser, mutator, selector, interfaceID);
+		Population population = new Population(size, crosser, mutator, selector, PopulationType.Symmetric, interfaceID);
 		
 		for(int i = 0; i < size; i++)
 		{
-			population.addChromosome(DataConverter.createRandomChromosome(distanceIndex));
+			population.addChromosome(DataFactory.createRandomChromosome(PopulationType.Symmetric, distanceIndex));
 		}
 		
 		return population;
 	}
 	
-	public static Chromosome createRandomChromosome(double[][] distanceIndex)
+	public static Population createRandomAsymmetricPopulation(double[][] distanceIndex, int size, Crosser crosser, Mutator mutator, Selector selector, int interfaceID) throws Exception
+	{
+		Population population = new Population(size, crosser, mutator, selector, PopulationType.Asymmetric, interfaceID);
+		
+		for(int i = 0; i < size; i++)
+		{
+			population.addChromosome(DataFactory.createRandomChromosome(PopulationType.Asymmetric, distanceIndex));
+		}
+		
+		return population;
+	}
+	
+	public static Chromosome createRandomChromosome(int populationType, double[][] distanceIndex) throws Exception
 	{
 		List<Integer> indicies = new ArrayList<Integer>();
 		
 		for(int i = 0; i < distanceIndex.length; i++)
 			indicies.add(i);
 		
-		Chromosome chromosome = new SymmetricChromosome(distanceIndex.length, distanceIndex);
+		Chromosome chromosome;
 		
+		switch(populationType)
+		{
+			case PopulationType.Symmetric:
+				chromosome = new SymmetricChromosome(distanceIndex.length, distanceIndex);
+				break;
+			case PopulationType.Asymmetric:
+				chromosome = new AsymmetricChromosome(distanceIndex.length, distanceIndex);
+				break;
+			default:
+				throw new Exception("Invalid population type!");
+		}
+	
 		int size = distanceIndex.length;
 		
 		Random random = new Random();
@@ -188,6 +213,32 @@ public class DataConverter
 		chromosome.calculateFitnessScore();
 		
 		return chromosome;
+	}
+	
+	public static Chromosome[] createNewChromosomeArray(int populationType, int size) throws Exception
+	{
+		switch(populationType)
+		{
+			case PopulationType.Symmetric:
+				return new SymmetricChromosome[size];
+			case PopulationType.Asymmetric:
+				return new AsymmetricChromosome[size];
+			default:
+				throw new Exception("Invalid population type!");
+		}
+	}
+	
+	public static Chromosome createNewChromosome(int populationType, int size, double[][] distanceIndex) throws Exception
+	{
+		switch(populationType)
+		{
+			case PopulationType.Symmetric:
+				return new SymmetricChromosome(size, distanceIndex);
+			case PopulationType.Asymmetric:
+				return new AsymmetricChromosome(size, distanceIndex);
+			default:
+				throw new Exception("Invalid population type!");
+		}
 	}
 	
 }

@@ -2,8 +2,8 @@ package tsp.actions.crossers;
 
 import java.util.Random;
 
-import tsp.objects.Chromosome;
-import tsp.objects.SymmetricChromosome;
+import tsp.actions.DataFactory;
+import tsp.objects.chromosomes.Chromosome;
 
 public class CycleCrosser implements Crosser
 {
@@ -36,8 +36,8 @@ public class CycleCrosser implements Crosser
 			int chromosomeSize = parent1.getSize();
 			double[][] distanceIndex = parent1.getDistanceIndex();
 			
-			this.child1 = new SymmetricChromosome(chromosomeSize, distanceIndex);
-			this.child2 = new SymmetricChromosome(chromosomeSize, distanceIndex);
+			this.child1 = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex);
+			this.child2 = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex);
 			
 			int[] cycles = new int[chromosomeSize];
 			
@@ -76,24 +76,21 @@ public class CycleCrosser implements Crosser
 				}
 			}
 			
-			
 			child1.calculateFitnessScore();
 			child2.calculateFitnessScore();
-			
-			/*System.out.println("\n");
-			for(int i = 0; i < chromosomeSize; i++)
-				System.out.print(cycles[i] + " ");
-			System.out.println("\n");*/
 		}
 		else
 		{
 			this.child1 = parent1.copy();
 			this.child2 = parent2.copy();
 		}
-		//this.child1.display();
-		//this.child2.display();
 		
-		return new Chromosome[] {this.child1, this.child2};
+		Chromosome children[] = DataFactory.createNewChromosomeArray(parent1.populationType, 2);
+		
+		children[0] = child1;
+		children[1] = child2;
+		
+		return children;
 	}
 	
 	//Private Methods

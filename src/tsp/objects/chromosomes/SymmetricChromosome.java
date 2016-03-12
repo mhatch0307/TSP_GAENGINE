@@ -1,19 +1,22 @@
-package tsp.objects;
+package tsp.objects.chromosomes;
 
 import java.util.Arrays;
 
+import tsp.objects.populations.PopulationType;
+
 public class SymmetricChromosome extends Chromosome
 {
-
 	//Constructors
 	public SymmetricChromosome(int size, double[][] distanceIndex) 
 	{
 		super(size, distanceIndex);
+		this.populationType = PopulationType.Symmetric;
 	}
 	
 	public SymmetricChromosome(int[] destinations, double[][] distanceIndex)
 	{
 		super(destinations, distanceIndex);
+		this.populationType = PopulationType.Symmetric;
 	}
 	
 	//Copy Constrcutor

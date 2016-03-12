@@ -3,7 +3,7 @@ package tsp.views;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import tsp.actions.DataConverter;
+import tsp.actions.DataFactory;
 import tsp.actions.crossers.Crosser;
 import tsp.actions.crossers.CycleCrosser;
 import tsp.actions.crossers.ERXCrosser;
@@ -17,7 +17,8 @@ import tsp.actions.selectors.RWSelector;
 import tsp.actions.selectors.RankSelector;
 import tsp.actions.selectors.Selector;
 import tsp.controllers.TSPController;
-import tsp.objects.Chromosome;
+import tsp.objects.chromosomes.Chromosome;
+import tsp.objects.populations.PopulationType;
 
 public class CLI extends UserInterface
 {
@@ -82,14 +83,14 @@ public class CLI extends UserInterface
 				this.prompt(false);
 				break;
 			case 3:
-				this.addPopulationToQueue();
+				this.addPopulationToQueue(PopulationType.Symmetric);
 				this.prompt(true);
 				break;
-			/*case 4:
-				this.setEndCriteria();
-				this.prompt();
-				break;*/
 			case 4:
+				this.addPopulationToQueue(PopulationType.Asymmetric);
+				this.prompt(true);
+				break;
+			case 5:
 				this.viewSolutions();
 				this.prompt(true);
 			default:
@@ -103,8 +104,9 @@ public class CLI extends UserInterface
 	{
 		System.out.print("Start TSP Engine: 1\n"
 						 + "Stop TSP Engine: 2\n"
-						 + "Add Population to Queue: 3\n"
-						 + "View Solutions: 4\n"
+						 + "Add Symmetric Population to Queue: 3\n"
+						 + "Add Asymmetric Population to Queue: 4\n"
+						 + "View Solutions: 5\n"
 						 + "Exit: 6\n"
 						 + "Enter Selection > ");
 	}
@@ -141,13 +143,13 @@ public class CLI extends UserInterface
 		
 	}
 	
-	private void addPopulationToQueue()
+	private void addPopulationToQueue(int populationType)
 	{
 		try {
 			System.out.print("File > ");
 			String filePath = this.scan.next();
 			
-			double[][] distanceIndex = DataConverter.XMLToDistanceIndex(filePath);
+			double[][] distanceIndex = DataFactory.XMLToDistanceIndex(filePath);
 			
 			this.displayCrosserOptions();
 			Crosser crosser = this.getCrosser(this.scan.nextInt());
@@ -165,7 +167,7 @@ public class CLI extends UserInterface
 			System.out.print("End Criteria > ");
 			int endCriteria = this.scan.nextInt();
 			
-			this.tspController.addToQueue(distanceIndex, size, endCriteria, crosser, mutator, selector, interfaceID);
+			this.tspController.addToQueue(distanceIndex, size, endCriteria, crosser, mutator, selector, populationType, interfaceID);
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
