@@ -15,23 +15,27 @@ public abstract class Chromosome
 	protected int[] destinations;
 	protected int currentSize;
 	protected double[][] distanceIndex;
+	protected double[][] verticies;
+	protected double[] positionIndex;
 	protected double fitnessScore;
 	
 	//Constructors
-	public Chromosome(int size, double[][] distanceIndex)
+	public Chromosome(int size, double[][] distanceIndex, double[][] verticies)
 	{
 		this.destinations = new int[size];
 		this.currentSize = 0;
 		this.distanceIndex = distanceIndex;
+		this.verticies = verticies;
 		this.fitnessScore = 0;
 		this.description = "Chromosome";
 	}
 	
-	public Chromosome(int[] destinations, double[][] distanceIndex)
+	public Chromosome(int[] destinations, double[][] distanceIndex, double[][] verticies)
 	{
 		this.destinations = Arrays.copyOf(destinations, destinations.length);
 		this.currentSize = destinations.length;
 		this.distanceIndex = distanceIndex;
+		this.verticies = verticies;
 		this.calculateFitnessScore();
 	}
 	
@@ -45,6 +49,7 @@ public abstract class Chromosome
 	public boolean isFull() { return this.currentSize == destinations.length; }
 	public double getFitnessScore() { return this.fitnessScore; }
 	public double[][] getDistanceIndex() { return this.distanceIndex; }
+	public double[][] getVerticies() { return this.verticies; }
 	public String getDescription() { return this.description; }
 	
 	public int getDestination(int index) throws Exception
@@ -353,7 +358,7 @@ public abstract class Chromosome
 		
 	}
 	
-	public void dispaly()
+	public void display()
 	{
 		System.out.println(this.description);
 		for(int i = 0; i < this.currentSize; i++)
@@ -363,6 +368,16 @@ public abstract class Chromosome
 		System.out.println("\nDistance Score: " + this.fitnessScore + "\n");
 		//this.calculateFitnessScore();
 		//System.out.println(this.fitnessScore);
+	}
+	
+	public String toString()
+	{
+		String chromosomeString = " ";
+		for(int i = 0; i < this.currentSize; i++)
+		{
+			chromosomeString += this.destinations[i] + " ";
+		}
+		return chromosomeString;
 	}
 	
 	//Protected Methods

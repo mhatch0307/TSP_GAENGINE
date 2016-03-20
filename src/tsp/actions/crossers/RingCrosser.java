@@ -36,14 +36,15 @@ public class RingCrosser implements Crosser
 		{
 			int p1Size = parent1.getSize();
 			double[][] distanceIndex = parent1.getDistanceIndex();
+			double[][] verticies = parent1.getDistanceIndex();
 			
 			Chromosome combinedChromosome = combine(parent1, parent2);
 			
 			int cutPoint1 = this.random.nextInt(p1Size);
 			int cutPoint2 = cutPoint1 + p1Size;
 			
-			child1 = new SymmetricChromosome(combinedChromosome.getSubsection(cutPoint1, p1Size), distanceIndex);
-			child2 = new SymmetricChromosome(combinedChromosome.getSubsectionReverse(cutPoint2, p1Size), distanceIndex);
+			child1 = new SymmetricChromosome(combinedChromosome.getSubsection(cutPoint1, p1Size), distanceIndex, verticies);
+			child2 = new SymmetricChromosome(combinedChromosome.getSubsectionReverse(cutPoint2, p1Size), distanceIndex, verticies);
 			
 			//combinedChromosome.display();
 		
@@ -78,8 +79,9 @@ public class RingCrosser implements Crosser
 		int combinedSize = p1Size + p1Size;
 		
 		double[][] distanceIndex = parent1.getDistanceIndex();
+		double[][] verticies = parent1.getDistanceIndex();
 		
-		Chromosome combinedChromosome = new SymmetricChromosome(combinedSize, distanceIndex);
+		Chromosome combinedChromosome = new SymmetricChromosome(combinedSize, distanceIndex, verticies);
 		
 		for(int i = 0; i < p1Size; i++)
 			combinedChromosome.addDestination(parent1.getDestination(i));

@@ -7,15 +7,15 @@ import tsp.objects.populations.PopulationType;
 public class AsymmetricChromosome extends Chromosome
 {
 	//Construcctor
-	public AsymmetricChromosome(int size, double[][] distanceIndex) 
+	public AsymmetricChromosome(int size, double[][] distanceIndex, double[][] verticies) 
 	{
-		super(size, distanceIndex);
+		super(size, distanceIndex, verticies);
 		this.populationType = PopulationType.Asymmetric;
 	}
 	
-	public AsymmetricChromosome(int[] destinations, double[][] distanceIndex)
+	public AsymmetricChromosome(int[] destinations, double[][] distanceIndex, double[][] verticies)
 	{
-		super(destinations, distanceIndex);
+		super(destinations, distanceIndex, verticies);
 		this.populationType = PopulationType.Asymmetric;
 	}
 	
@@ -23,7 +23,7 @@ public class AsymmetricChromosome extends Chromosome
 	@Override
 	public Chromosome copy()
 	{
-		Chromosome chromosome = new AsymmetricChromosome(this.destinations.length, this.distanceIndex);
+		Chromosome chromosome = new AsymmetricChromosome(this.destinations.length, this.distanceIndex, this.verticies);
 		chromosome.fitnessScore = this.fitnessScore;
 		chromosome.destinations = Arrays.copyOf(this.destinations, this.destinations.length);
 		chromosome.currentSize = this.currentSize;

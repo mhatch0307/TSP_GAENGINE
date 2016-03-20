@@ -47,6 +47,7 @@ public class ERXCrosser implements Crosser
 		{
 			int chromosomeSize = parent1.getSize();
 			double[][] distanceIndex = parent1.getDistanceIndex();	
+			double[][] verticies = parent1.getVerticies();
 			
 			// prep tracking for remaining destinations
 			this.remainingDestinations = new ArrayList<Integer>();
@@ -57,7 +58,7 @@ public class ERXCrosser implements Crosser
 			
 			//this.displayNeighborLists();
 			
-			child = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex);
+			child = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex, verticies);
 			
 			int destination = (random.nextInt(2) == 0)? parent1.getDestination(0) : parent2.getDestination(0);
 			

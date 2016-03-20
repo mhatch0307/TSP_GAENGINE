@@ -35,9 +35,10 @@ public class CycleCrosser implements Crosser
 		{
 			int chromosomeSize = parent1.getSize();
 			double[][] distanceIndex = parent1.getDistanceIndex();
+			double[][] verticies = parent1.getVerticies();
 			
-			this.child1 = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex);
-			this.child2 = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex);
+			this.child1 = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex, verticies);
+			this.child2 = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex, verticies);
 			
 			int[] cycles = new int[chromosomeSize];
 			

@@ -112,6 +112,26 @@ public class DataFactory
 		return distanceIndex;
 	}
 	
+	public static double distanceBetween(double[] vertex1, double[] vertex2)
+	{
+		return Math.sqrt(Math.pow(vertex2[0] - vertex1[0], 2) + Math.pow(vertex2[1] - vertex1[1], 2));
+	}
+	
+	public static double[][] verticiesToDistanceIndex(double[][] verticies)
+	{
+		double distanceIndex[][] = new double[verticies.length][verticies.length];
+		
+		for(int i = 0; i < verticies.length; i++)
+		{
+			for(int j = 0; j < verticies.length; j++)
+			{
+				distanceIndex[i][j] = DataFactory.distanceBetween(verticies[i], verticies[j]);
+			}
+		}
+		
+		return distanceIndex;
+	}
+	
 	/*public static String PEToXML(Destination[][] destinations)
 	{
 		return null;
@@ -146,31 +166,31 @@ public class DataFactory
 		return 0;
 	}
 	
-	public static Population createRandomSymmetricPopulation(double[][] distanceIndex, int size, Crosser crosser, Mutator mutator, Selector selector, int interfaceID) throws Exception
+	public static Population createRandomSymmetricPopulation(double[][] distanceIndex, double[][] verticies, int size, Crosser crosser, Mutator mutator, Selector selector, int interfaceID) throws Exception
 	{
 		Population population = new Population(size, crosser, mutator, selector, PopulationType.Symmetric, interfaceID);
 		
 		for(int i = 0; i < size; i++)
 		{
-			population.addChromosome(DataFactory.createRandomChromosome(PopulationType.Symmetric, distanceIndex));
+			population.addChromosome(DataFactory.createRandomChromosome(PopulationType.Symmetric, distanceIndex, verticies));
 		}
 		
 		return population;
 	}
 	
-	public static Population createRandomAsymmetricPopulation(double[][] distanceIndex, int size, Crosser crosser, Mutator mutator, Selector selector, int interfaceID) throws Exception
+	public static Population createRandomAsymmetricPopulation(double[][] distanceIndex, double[][] verticies, int size, Crosser crosser, Mutator mutator, Selector selector, int interfaceID) throws Exception
 	{
 		Population population = new Population(size, crosser, mutator, selector, PopulationType.Asymmetric, interfaceID);
 		
 		for(int i = 0; i < size; i++)
 		{
-			population.addChromosome(DataFactory.createRandomChromosome(PopulationType.Asymmetric, distanceIndex));
+			population.addChromosome(DataFactory.createRandomChromosome(PopulationType.Asymmetric, distanceIndex, verticies));
 		}
 		
 		return population;
 	}
 	
-	public static Chromosome createRandomChromosome(int populationType, double[][] distanceIndex) throws Exception
+	public static Chromosome createRandomChromosome(int populationType, double[][] distanceIndex, double[][] verticies) throws Exception
 	{
 		List<Integer> indicies = new ArrayList<Integer>();
 		
@@ -182,10 +202,10 @@ public class DataFactory
 		switch(populationType)
 		{
 			case PopulationType.Symmetric:
-				chromosome = new SymmetricChromosome(distanceIndex.length, distanceIndex);
+				chromosome = new SymmetricChromosome(distanceIndex.length, distanceIndex, verticies);
 				break;
 			case PopulationType.Asymmetric:
-				chromosome = new AsymmetricChromosome(distanceIndex.length, distanceIndex);
+				chromosome = new AsymmetricChromosome(distanceIndex.length, distanceIndex, verticies);
 				break;
 			default:
 				throw new Exception("Invalid population type!");
@@ -228,17 +248,16 @@ public class DataFactory
 		}
 	}
 	
-	public static Chromosome createNewChromosome(int populationType, int size, double[][] distanceIndex) throws Exception
+	public static Chromosome createNewChromosome(int populationType, int size, double[][] distanceIndex, double[][] verticies) throws Exception
 	{
 		switch(populationType)
 		{
 			case PopulationType.Symmetric:
-				return new SymmetricChromosome(size, distanceIndex);
+				return new SymmetricChromosome(size, distanceIndex, verticies);
 			case PopulationType.Asymmetric:
-				return new AsymmetricChromosome(size, distanceIndex);
+				return new AsymmetricChromosome(size, distanceIndex, verticies);
 			default:
 				throw new Exception("Invalid population type!");
 		}
 	}
-	
 }

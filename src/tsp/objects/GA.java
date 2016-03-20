@@ -7,9 +7,9 @@ import tsp.objects.populations.Population;
 public class GA extends Thread
 {
 	//Private Members
-	private Population population;
-	private Chromosome mostOptimalChromosome;
-	private int endCriteria;
+	protected Population population;
+	protected Chromosome mostOptimalChromosome;
+	protected int endCriteria;
 	
 	//Constructors
 	public GA(Population population, int endCriteria)

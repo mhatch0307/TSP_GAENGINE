@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import tsp.actions.DataFactory;
+import tsp.actions.DataReader;
 import tsp.actions.crossers.Crosser;
 import tsp.actions.crossers.CycleCrosser;
 import tsp.actions.crossers.ERXCrosser;
@@ -17,7 +18,10 @@ import tsp.actions.selectors.RWSelector;
 import tsp.actions.selectors.RankSelector;
 import tsp.actions.selectors.Selector;
 import tsp.controllers.TSPController;
+import tsp.objects.DemoGA;
+import tsp.objects.GA;
 import tsp.objects.chromosomes.Chromosome;
+import tsp.objects.populations.Population;
 import tsp.objects.populations.PopulationType;
 
 public class CLI extends UserInterface
@@ -64,12 +68,6 @@ public class CLI extends UserInterface
 		prompt(true);
 	}
 	
-	public static void main(String[] args)
-	{
-		CLI cli = new CLI((float) .8, (float) .2);
-		cli.prompt(true);
-	}
-	
 	public void executeCommand(int option)
 	{
 		switch(option)
@@ -93,6 +91,12 @@ public class CLI extends UserInterface
 			case 5:
 				this.viewSolutions();
 				this.prompt(true);
+			case 6:
+				this.demoGA(PopulationType.Symmetric);
+				this.prompt(true);
+			case 7:
+				this.demoGA(PopulationType.Asymmetric);
+				this.prompt(true);
 			default:
 				this.exit();
 		}
@@ -107,7 +111,8 @@ public class CLI extends UserInterface
 						 + "Add Symmetric Population to Queue: 3\n"
 						 + "Add Asymmetric Population to Queue: 4\n"
 						 + "View Solutions: 5\n"
-						 + "Exit: 6\n"
+						 + "Demo GA: 6\n"
+						 + "Exit: 7\n"
 						 + "Enter Selection > ");
 	}
 	
@@ -124,7 +129,8 @@ public class CLI extends UserInterface
 	private void displayMutatorOptions()
 	{
 		System.out.print("Swap Mutator: 1\n"
-						 + "Scramble Mutator: 2\n> ");
+						 + "Scramble Mutator: 2\n"
+						 + "Enter Selection > ");
 	}
 	
 	private void displaySelectorOptions()
@@ -138,18 +144,36 @@ public class CLI extends UserInterface
 	{
 		for(Chromosome solution : this.solutions)
 		{
-			solution.dispaly();
+			solution.display();
 		}
 		
 	}
 	
 	private void addPopulationToQueue(int populationType)
 	{
-		try {
+		try
+		{
 			System.out.print("File > ");
 			String filePath = this.scan.next();
 			
-			double[][] distanceIndex = DataFactory.XMLToDistanceIndex(filePath);
+			String ext = filePath.substring(filePath.indexOf('.') + 1, filePath.length());
+			
+			double[][] distanceIndex;
+			double[][] verticies = null;
+			
+			if(ext.equals("xml"))
+			{
+				distanceIndex = DataFactory.XMLToDistanceIndex(filePath);
+			}
+			else if(ext.equals("tsp"))
+			{
+				verticies = DataReader.readTSPFile(filePath);
+				distanceIndex = DataFactory.verticiesToDistanceIndex(verticies);
+			}
+			else
+			{
+				throw new Exception("Invalid file type!");
+			}
 			
 			this.displayCrosserOptions();
 			Crosser crosser = this.getCrosser(this.scan.nextInt());
@@ -167,9 +191,84 @@ public class CLI extends UserInterface
 			System.out.print("End Criteria > ");
 			int endCriteria = this.scan.nextInt();
 			
-			this.tspController.addToQueue(distanceIndex, size, endCriteria, crosser, mutator, selector, populationType, interfaceID);
-		
-		} catch (Exception e) {
+			this.tspController.addToQueue(distanceIndex, verticies, size, endCriteria, crosser, mutator, selector, populationType, interfaceID);
+		} 
+		catch (Exception e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void demoGA(int populationType)
+	{
+		try
+		{
+			System.out.print("File > ");
+			String filePath = this.scan.next();
+			
+			String ext = filePath.substring(filePath.indexOf('.') + 1, filePath.length());
+			
+			double[][] distanceIndex;
+			double[][] verticies = null;
+			
+			if(ext.equals("xml"))
+			{
+				distanceIndex = DataFactory.XMLToDistanceIndex(filePath);
+			}
+			else if(ext.equals("tsp"))
+			{
+				verticies = DataReader.readTSPFile(filePath);
+				distanceIndex = DataFactory.verticiesToDistanceIndex(verticies);
+			}
+			else
+			{
+				throw new Exception("Invalid file type!");
+			}
+			
+			this.displayCrosserOptions();
+			Crosser crosser = this.getCrosser(this.scan.nextInt());
+			
+			this.displayMutatorOptions();
+			Mutator mutator = this.getMutator(this.scan.nextInt());
+			
+			this.displaySelectorOptions();
+			
+			Selector selector = this.getSelector(this.scan.nextInt());
+			
+			System.out.print("Population Size > ");
+			int size = this.scan.nextInt();
+			
+			System.out.print("End Criteria > ");
+			int endCriteria = this.scan.nextInt();
+			
+			Population population;
+			try 
+			{
+				switch(populationType)
+				{
+					case PopulationType.Symmetric:
+						population = DataFactory.createRandomSymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector, interfaceID);
+						break;
+					case PopulationType.Asymmetric:
+						population = DataFactory.createRandomAsymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector, interfaceID);
+						break;
+					default:
+						throw new Exception("Invalid Population Type!");
+				}
+				GA ga = new DemoGA(population, endCriteria);
+				ga.start();
+			} 
+			catch (Exception e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			//this.tspController.addToQueue(distanceIndex, verticies, size, endCriteria, crosser, mutator, selector, populationType, interfaceID);
+		} 
+		catch (Exception e) 
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -218,5 +317,11 @@ public class CLI extends UserInterface
 			default:
 				return new OXCrosser(this.crossProbability);
 		}
+	}
+	
+	public static void main(String[] args)
+	{
+		CLI cli = new CLI((float) .7, (float) .1);
+		cli.prompt(true);
 	}
 }

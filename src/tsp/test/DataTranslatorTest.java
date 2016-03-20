@@ -87,7 +87,7 @@ public class DataTranslatorTest
 			
 			//child.display();
 			
-			Population population1 = DataFactory.createRandomSymmetricPopulation(distanceIndex, 100, new RingCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);
+			/*Population population1 = DataFactory.createRandomSymmetricPopulation(distanceIndex, 100, new RingCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);
 			Population population2 = DataFactory.createRandomSymmetricPopulation(distanceIndex, 100, new ERXCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);
 			GA ga1 = new GA(population1, 1000);
 			GA ga2 = new GA(population2, 1000);
@@ -95,7 +95,7 @@ public class DataTranslatorTest
 			TSPEngine.addToQueue(ga1);
 			TSPEngine.addToQueue(ga2);
 			
-			TSPEngine.getInstance().run();
+			TSPEngine.getInstance().run();*/
 			
 			//GA ga1 = new GA(population, 100000);
 			

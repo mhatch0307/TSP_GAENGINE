@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tsp.actions.DataFactory;
+import tsp.actions.GoogleMapsAPI;
 import tsp.actions.TSPEngine;
 import tsp.actions.crossers.Crosser;
 import tsp.actions.mutators.Mutator;
@@ -22,7 +23,7 @@ public class TSPController
 	private static int lastUserInterfaceID = 0;
 	
 	//Constructors
-	protected TSPController()
+	public TSPController()
 	{
 		this.userInterfaces = new HashMap<Integer, UserInterface>();
 	}
@@ -68,7 +69,7 @@ public class TSPController
 		userInterface.displayMessage("Optimal solution has been found!");
 	}
 	
-	public void addToQueue(double[][] distanceIndex, int size, int endCriteria, Crosser crosser, Mutator mutator, Selector selector, int populationType, int interfaceID)
+	public void addToQueue(double[][] distanceIndex, double[][] verticies, int size, int endCriteria, Crosser crosser, Mutator mutator, Selector selector, int populationType, int interfaceID)
 	{
 		Population population;
 		try 
@@ -76,10 +77,10 @@ public class TSPController
 			switch(populationType)
 			{
 				case PopulationType.Symmetric:
-					population = DataFactory.createRandomSymmetricPopulation(distanceIndex, size, crosser, mutator, selector, interfaceID);
+					population = DataFactory.createRandomSymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector, interfaceID);
 					break;
 				case PopulationType.Asymmetric:
-					population = DataFactory.createRandomAsymmetricPopulation(distanceIndex, size, crosser, mutator, selector, interfaceID);
+					population = DataFactory.createRandomAsymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector, interfaceID);
 					break;
 				default:
 					throw new Exception("Invalid Population Type!");
@@ -95,5 +96,12 @@ public class TSPController
 			String message = e.getMessage();
 			this.userInterfaces.get(interfaceID).displayMessage("Unable to add Population." + message);
 		}
+	}
+	
+	public double[][] addressesToDistanceIndex(String[] addresses)
+	{
+		GoogleMapsAPI googleMapsAPI = new GoogleMapsAPI("json", "AIzaSyAIIGgX0htxhCBnOy6xk_7ZCOAPz3ntoSk");
+		double distanceIndex[][] = googleMapsAPI.getDistanceIndexAddress(addresses, addresses, "imperial");
+		return distanceIndex;
 	}
 }
