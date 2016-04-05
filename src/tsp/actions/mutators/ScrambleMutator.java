@@ -2,19 +2,18 @@ package tsp.actions.mutators;
 
 import java.util.Random;
 
+import tsp.actions.MyRandom;
 import tsp.objects.chromosomes.Chromosome;
 
 public class ScrambleMutator implements Mutator
 {
 	//Private Members
-	private float probability;
 	private Random random;
 	
 	//Constructors
-	public ScrambleMutator(float probability)
+	public ScrambleMutator()
 	{
-		this.probability = probability;
-		this.random = new Random();
+		this.random = MyRandom.getInstance().random;
 	}
 	
 	//Getters
@@ -23,25 +22,17 @@ public class ScrambleMutator implements Mutator
 	
 	//Public Methods
 	@Override
-	public Chromosome mutate(Chromosome parent) throws Exception 
+	public void mutate(Chromosome parent) throws Exception 
 	{
-		Chromosome child = parent.copy();
+		int size = parent.getSize();
+		int p1 = random.nextInt(size);
+		int p2 = 0;
 		
-		if(random.nextFloat() <= this.probability)
+		do
 		{
-			int size = parent.getSize();
-			int p1 = random.nextInt(size);
-			int p2 = 0;
-			
-			do
-			{
-				p2 = random.nextInt(size);
-			} while(p2 == p1);
-			
-			//System.out.println(p1 + " " + p2);
-			
-			child.scramble(p1, p2);
-		}
-		return child;
+			p2 = random.nextInt(size);
+		} while(p2 == p1);
+
+		parent.scramble(p1, p2);
 	}
 }

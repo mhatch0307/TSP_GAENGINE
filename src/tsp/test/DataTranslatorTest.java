@@ -1,23 +1,22 @@
 package tsp.test;
 
 import tsp.actions.DataFactory;
-import tsp.actions.TSPEngine;
 import tsp.actions.crossers.ERXCrosser;
-import tsp.actions.crossers.RingCrosser;
 import tsp.actions.mutators.SwapMutator;
 import tsp.actions.selectors.RWSelector;
-import tsp.objects.GA;
 import tsp.objects.populations.Population;
 
 
+@SuppressWarnings("unused")
 public class DataTranslatorTest 
 {
 	public static void main(String[] args)
 	{
 		
-		String filePath = "/Users/matthew/Documents/TSP/TSPProblems/ulysses16.xml";
+		//String filePath = "/Users/matthew/Documents/TSP/TSPProblems/ulysses16.xml";
+		//String filePath = "/Users/matthew/Documents/TSP/TSPProblems/ulysses22.xml";
 		//String filePath = "/Users/matthew/Documents/TSP/TSPProblems/fnl4461.xml";
-		//String filePath =  "/Users/matthew/Documents/TSP/TSPProblems/a280.xml";
+		String filePath =  "/Users/matthew/Documents/TSP/TSPProblems/a280.xml";
 		//String filePath =  "/Users/matthew/Documents/TSP/TSPProblems/att532.xml";
 		//String filePath =  "/Users/matthew/Documents/TSP/TSPProblems/berlin52.xml";
 		//String filePath =  "/Users/matthew/Documents/TSP/TSPProblems/rat99.xml";
@@ -25,7 +24,8 @@ public class DataTranslatorTest
 		
 		double[][] distanceIndex;
 		
-		try {
+		try 
+		{
 			distanceIndex = DataFactory.XMLToDistanceIndex(filePath);
 			
 			/*for (int i = 0; i < distanceIndex.length; i++)
@@ -86,6 +86,20 @@ public class DataTranslatorTest
 			//Chromosome child = mutator.mutate(chromosome1);
 			
 			//child.display();
+			
+			/*Population population1 = DataFactory.createRandomSymmetricPopulation(distanceIndex, null, 100, new ERXCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);
+			
+			double totalFitness = 0;
+			
+			for(int i = 0; i < population1.getSize(); i++)
+			{
+				double fitness = population1.getChromosome(i).getFitnessScore() - (population1.getMostOptimalMember().getFitnessScore() * .9);
+				System.out.println(fitness);
+				totalFitness += fitness;
+			}
+			
+			System.out.println(totalFitness);
+			System.out.println((int) totalFitness);*/
 			
 			/*Population population1 = DataFactory.createRandomSymmetricPopulation(distanceIndex, 100, new RingCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);
 			Population population2 = DataFactory.createRandomSymmetricPopulation(distanceIndex, 100, new ERXCrosser((float) .8), new SwapMutator((float) .2), new RWSelector(), 1);

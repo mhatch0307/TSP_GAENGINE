@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,11 +31,8 @@ public class GoogleMapsAPI
 		city = city.replaceAll(" ", "+");
 		
 		String URLString = this.BaseURL + "geocode/"+this.format+"?" + "address="+address+",+"+city+",+"+state+"&key"+this.key;
-		
 		String latLngJSON = this.makeGoogleAPIRequest(URLString);
-		
-		//System.out.println(latLngJSON);
-		
+
 		try 
 		{
 			final JSONObject jsonObj = new JSONObject(latLngJSON);
@@ -60,45 +56,63 @@ public class GoogleMapsAPI
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
 		return null;
 	}
 	
-	public double[][] getDistanceIndexLatLng(double[][] origins, double[][] destinations, String units)
+	public double[][] getLatLngs(JSONArray addresses)
 	{
+		int length = addresses.length();
 		
+		double latLngs[][] = new double[length][2];
+		
+		for(int i = 0; i < length; i++)
+		{
+			try 
+			{
+				JSONObject address = addresses.getJSONObject(i);
+				latLngs[i] = this.getLatLng(address.getString("address"),
+											address.getString("city"),
+											address.getString("state"));
+			} 
+			catch (JSONException e) 
+			{
+				e.printStackTrace();
+			}
+			
+		}
+		
+		return latLngs;
+	}
+	
+	public double[][] getDistanceIndexLatLng(double[][] origins, double[][] destinations, String units)
+	{	
 		String URLString = this.BaseURL + "distancematrix/" + this.format + "?" + "units="+units;
 		
 		//append origins
 		String originsString = "&origins=";
+		String destinationsString = "&destinations=";
+		
 		for(int i = 0; i < origins.length; i++)
 		{
 			originsString += origins[i][0] + "," + origins[i][1] + ((i != origins.length - 1)? "|" : "");
 		}
 		
-		URLString += originsString;
-		
 		//append destinations
-		String destinationsString = "&destinations=";
-		
 		for(int i = 0; i < destinations.length; i++)
 		{
 			destinationsString += destinations[i][0] + "%2C" + destinations[i][1] + ((i != destinations.length - 1)? "%7C" : "");
 		}
 		
+		URLString += originsString;
 		URLString += destinationsString;
 	
 		URLString += "&key="+this.key;
 		
-		//System.out.println(URLString);
+		String distanceJSONString = this.makeGoogleAPIRequest(URLString);
 		
-		String destinationsJSON = this.makeGoogleAPIRequest(URLString);
+		double[][] distanceIndex = this.parseDistanceJSONString(distanceJSONString);
 		
-		System.out.println(destinationsJSON);
-		
-		return null;
+		return distanceIndex;
 	}
 	
 	public double[][] getDistanceIndexAddress(String origins[], String destinations[], String units)
@@ -135,6 +149,7 @@ public class GoogleMapsAPI
 	}
 	
 	//Private Methods
+	
 	private double[][] parseDistanceJSONString(String distanceJSONString)
 	{
 		try
@@ -205,7 +220,8 @@ public class GoogleMapsAPI
 	
 	public static void main(String args[])
 	{
-		GoogleMapsAPI googleMapsAPI = new GoogleMapsAPI("json", "AIzaSyAIIGgX0htxhCBnOy6xk_7ZCOAPz3ntoSk");
+		GoogleMapsAPI googleMapsAPI = new GoogleMapsAPI("json", "AIzaSyC0SfHXfKObjQ7BYUFPOrliBv4yHqnisUE");
+		//GoogleMapsAPI googleMapsAPI = new GoogleMapsAPI("json", "AIzaSyDTmNJUZgKVYCbqoK_zywP5wDQSaX3LxI8");
 		
 		double[][] origins = new double[2][2];
 		origins[0] = googleMapsAPI.getLatLng("1515 Windrider Ct", "Fenton", "MO"); 

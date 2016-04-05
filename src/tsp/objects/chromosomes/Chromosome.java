@@ -3,6 +3,8 @@ package tsp.objects.chromosomes;
 import java.util.Arrays;
 import java.util.Random;
 
+import tsp.actions.MyRandom;
+
 public abstract class Chromosome 
 {
 	//Public Members
@@ -18,6 +20,7 @@ public abstract class Chromosome
 	protected double[][] verticies;
 	protected double[] positionIndex;
 	protected double fitnessScore;
+	private Random random;
 	
 	//Constructors
 	public Chromosome(int size, double[][] distanceIndex, double[][] verticies)
@@ -28,6 +31,7 @@ public abstract class Chromosome
 		this.verticies = verticies;
 		this.fitnessScore = 0;
 		this.description = "Chromosome";
+		this.random = MyRandom.getInstance().random;
 	}
 	
 	public Chromosome(int[] destinations, double[][] distanceIndex, double[][] verticies)
@@ -36,6 +40,7 @@ public abstract class Chromosome
 		this.currentSize = destinations.length;
 		this.distanceIndex = distanceIndex;
 		this.verticies = verticies;
+		this.random = MyRandom.getInstance().random;
 		this.calculateFitnessScore();
 	}
 	
@@ -349,7 +354,6 @@ public abstract class Chromosome
 		}
 		
 		int numInSubsection = (index2 - index1) + 1;
-		Random random = new Random();
 		for(int i = index1; i <= index2; i++)
 		{
 			int swapWith = random.nextInt(numInSubsection) + index1;
@@ -367,12 +371,12 @@ public abstract class Chromosome
 		}
 		System.out.println("\nDistance Score: " + this.fitnessScore + "\n");
 		//this.calculateFitnessScore();
-		//System.out.println(this.fitnessScore);
+		//System.out.println("verify: " + this.fitnessScore);
 	}
 	
 	public String toString()
 	{
-		String chromosomeString = " ";
+		String chromosomeString = "";
 		for(int i = 0; i < this.currentSize; i++)
 		{
 			chromosomeString += this.destinations[i] + " ";

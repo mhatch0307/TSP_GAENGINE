@@ -8,6 +8,6 @@ public interface Mutator
 	public String getDescription();
 	
 	//Mutators
-	public Chromosome mutate(Chromosome parent) throws Exception;
+	public void mutate(Chromosome parent) throws Exception;
 }
 

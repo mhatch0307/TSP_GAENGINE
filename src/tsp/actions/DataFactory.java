@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.mxgraph.view.mxGraph;
 
@@ -166,9 +165,11 @@ public class DataFactory
 		return 0;
 	}
 	
-	public static Population createRandomSymmetricPopulation(double[][] distanceIndex, double[][] verticies, int size, Crosser crosser, Mutator mutator, Selector selector, int interfaceID) throws Exception
+	public static Population createRandomSymmetricPopulation(double[][] distanceIndex, double[][] verticies, int size, 
+			Crosser crosser, Mutator mutator, Selector selector, float crossProbability, float mutateProbability, int interfaceID) throws Exception
 	{
-		Population population = new Population(size, crosser, mutator, selector, PopulationType.Symmetric, interfaceID);
+		Population population = new Population(size, crosser, mutator, selector, PopulationType.Symmetric, 
+				crossProbability, mutateProbability, interfaceID);
 		
 		for(int i = 0; i < size; i++)
 		{
@@ -178,9 +179,11 @@ public class DataFactory
 		return population;
 	}
 	
-	public static Population createRandomAsymmetricPopulation(double[][] distanceIndex, double[][] verticies, int size, Crosser crosser, Mutator mutator, Selector selector, int interfaceID) throws Exception
+	public static Population createRandomAsymmetricPopulation(double[][] distanceIndex, double[][] verticies, int size, 
+			Crosser crosser, Mutator mutator, Selector selector, float crossProbability, float mutateProbability, int interfaceID) throws Exception
 	{
-		Population population = new Population(size, crosser, mutator, selector, PopulationType.Asymmetric, interfaceID);
+		Population population = new Population(size, crosser, mutator, selector, PopulationType.Asymmetric, 
+				crossProbability, mutateProbability, interfaceID);
 		
 		for(int i = 0; i < size; i++)
 		{
@@ -213,11 +216,9 @@ public class DataFactory
 	
 		int size = distanceIndex.length;
 		
-		Random random = new Random();
-		
 		while(size > 0)
 		{
-			int index = random.nextInt(size); 
+			int index = MyRandom.getInstance().random.nextInt(size); 
 			int destinationID = indicies.remove(index);
 			
 			try {
@@ -229,7 +230,7 @@ public class DataFactory
 			size--;
 			
 		}
-		
+
 		chromosome.calculateFitnessScore();
 		
 		return chromosome;
@@ -256,6 +257,19 @@ public class DataFactory
 				return new SymmetricChromosome(size, distanceIndex, verticies);
 			case PopulationType.Asymmetric:
 				return new AsymmetricChromosome(size, distanceIndex, verticies);
+			default:
+				throw new Exception("Invalid population type!");
+		}
+	}
+	
+	public static Chromosome createNewChromosome(int populationType, int[] destinations, double[][] distanceIndex, double[][] verticies) throws Exception
+	{
+		switch(populationType)
+		{
+			case PopulationType.Symmetric:
+				return new SymmetricChromosome(destinations, distanceIndex, verticies);
+			case PopulationType.Asymmetric:
+				return new AsymmetricChromosome(destinations, distanceIndex, verticies);
 			default:
 				throw new Exception("Invalid population type!");
 		}

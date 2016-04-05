@@ -27,16 +27,12 @@ import tsp.objects.populations.PopulationType;
 public class CLI extends UserInterface
 {
 	//Private Members
-	private float crossProbability;
-	private float mutateProbability;
 	private Scanner scan;
 	private TSPController tspController;
 	
 	//Constructors
-	protected CLI(float crossProbability, float mutateProbability)
+	protected CLI()
 	{
-		this.crossProbability = crossProbability;
-		this.mutateProbability = mutateProbability;
 		this.scan = new Scanner(System.in);
 		this.tspController = TSPController.getInstance();
 		this.tspController.addUserInterface(this);
@@ -65,7 +61,7 @@ public class CLI extends UserInterface
 	@Override
 	public void refresh() 
 	{
-		prompt(true);
+		//prompt(true);
 	}
 	
 	public void executeCommand(int option)
@@ -191,7 +187,23 @@ public class CLI extends UserInterface
 			System.out.print("End Criteria > ");
 			int endCriteria = this.scan.nextInt();
 			
-			this.tspController.addToQueue(distanceIndex, verticies, size, endCriteria, crosser, mutator, selector, populationType, interfaceID);
+			System.out.print("Crossover Probability > ");
+			float crossProbability = this.scan.nextFloat();
+			
+			System.out.print("Mutate Probability > ");
+			float mutateProbability = this.scan.nextFloat();
+			
+			this.tspController.addToQueue(distanceIndex, 
+												  	verticies, 
+												  	size, 
+												  	endCriteria, 
+												  	crosser, 
+												  	mutator, 
+												  	selector, 
+												  	populationType, 
+												  	crossProbability,
+												  	mutateProbability,
+												    interfaceID);
 		} 
 		catch (Exception e) 
 		{
@@ -242,16 +254,24 @@ public class CLI extends UserInterface
 			System.out.print("End Criteria > ");
 			int endCriteria = this.scan.nextInt();
 			
+			System.out.print("Crossover Probability > ");
+			float crossProbability = this.scan.nextFloat();
+			
+			System.out.print("Mutate Probability > ");
+			float mutateProbability = this.scan.nextFloat();
+			
 			Population population;
 			try 
 			{
 				switch(populationType)
 				{
 					case PopulationType.Symmetric:
-						population = DataFactory.createRandomSymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector, interfaceID);
+						population = DataFactory.createRandomSymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector, 
+								crossProbability, mutateProbability, interfaceID);
 						break;
 					case PopulationType.Asymmetric:
-						population = DataFactory.createRandomAsymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector, interfaceID);
+						population = DataFactory.createRandomAsymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector, 
+								crossProbability, mutateProbability, interfaceID);
 						break;
 					default:
 						throw new Exception("Invalid Population Type!");
@@ -292,11 +312,11 @@ public class CLI extends UserInterface
 		switch(option)
 		{
 			case 1:
-				return new SwapMutator(this.mutateProbability);
+				return new SwapMutator();
 			case 2:
-				return new ScrambleMutator(this.mutateProbability);
+				return new ScrambleMutator();
 			default:
-				return new SwapMutator(this.mutateProbability);
+				return new SwapMutator();
 		}
 	}
 	
@@ -305,23 +325,23 @@ public class CLI extends UserInterface
 		switch(option)
 		{
 			case 1: 
-				return new OXCrosser(this.crossProbability);
+				return new OXCrosser();
 			case 2:
-				return new MPXCrosser(this.crossProbability);
+				return new MPXCrosser();
 			case 3:
-				return new ERXCrosser(this.crossProbability);
+				return new ERXCrosser();
 			case 4:
-				return new RingCrosser(this.crossProbability);
+				return new RingCrosser();
 			case 5:
-				return new CycleCrosser(this.crossProbability);
+				return new CycleCrosser();
 			default:
-				return new OXCrosser(this.crossProbability);
+				return new OXCrosser();
 		}
 	}
 	
 	public static void main(String[] args)
 	{
-		CLI cli = new CLI((float) .7, (float) .1);
+		CLI cli = new CLI();
 		cli.prompt(true);
 	}
 }

@@ -27,7 +27,7 @@ public class GA extends Thread
 		this.mostOptimalChromosome = this.population.getMostOptimalMember();
 		int numIterations = 0;
 		
-		while(numIterations < this.endCriteria && this.population.getSize() > 2)
+		while(numIterations < this.endCriteria)
 		{
 			try {
 				this.population.generateOffSpring();
@@ -40,7 +40,10 @@ public class GA extends Thread
 			double newFitnessScore = newMostOptimal.getFitnessScore();
 		
 			if(newFitnessScore < this.mostOptimalChromosome.getFitnessScore())
+			{
 				this.mostOptimalChromosome = newMostOptimal;
+				numIterations = 0;
+			}
 			else
 				numIterations++;
 		}

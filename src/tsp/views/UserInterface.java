@@ -17,6 +17,7 @@ public abstract class UserInterface extends Thread
 	
 	//Getters
 	List<Chromosome> getSolution() { return this.solutions; }
+	public int getInterfaceID() { return this.interfaceID; }
 	
 	//Setters
 	public void setInterfaceID(int interfaceID) { this.interfaceID = interfaceID;}

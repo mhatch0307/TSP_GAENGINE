@@ -3,19 +3,18 @@ package tsp.actions.crossers;
 import java.util.Random;
 
 import tsp.actions.DataFactory;
+import tsp.actions.MyRandom;
 import tsp.objects.chromosomes.Chromosome;
 
 public class OXCrosser implements Crosser
 {
 	//Private Memebrs
-	private float probability; 
 	private Random random;
 	
 	//Constructors
-	public OXCrosser(float probability) 
+	public OXCrosser() 
 	{
-		this.probability = probability;
-		this.random = new Random();
+		this.random = MyRandom.getInstance().random;
 	}
 	
 	//Getters
@@ -37,28 +36,25 @@ public class OXCrosser implements Crosser
 		int start = this.random.nextInt(size - (size / 4));
 		int length = this.random.nextInt((size / 4) - (size / 8)) + (size / 8) + 1;
 		
-		//start = 3;
-		//length = 3;
+		Chromosome winner = null;
+		Chromosome loser = null;
 		
-		Chromosome child1 = parent2.copy();
-		Chromosome child2 = parent1.copy();
-		
-		//System.out.print("Child 1 Before: "); child1.display();
-		//System.out.print("Child 2 Before: "); child2.display(); 
-		
-		if(this.random.nextFloat() <= this.probability)
+		if(parent1.getFitnessScore() > parent2.getFitnessScore())
 		{
-			this.swapSection(parent1, child1, start, length);
-			this.swapSection(parent2, child2, start, length);
+			winner = parent2;
+			loser = parent1;
 		}
-		//System.out.print("Child 1 After: "); child1.display();
-		//System.out.print("Child 2 After: "); child2.display();
-		
+		else
+		{
+			winner = parent1;
+			loser = parent2;
+		}
+	
+		this.swapSection(loser, winner, start, length);
+		this.swapSection(winner, loser, start, length);
 		Chromosome children[] = DataFactory.createNewChromosomeArray(parent1.populationType, 2);
-		
-		children[0] = child1;
-		children[1] = child2;
-		
+		children[0] = winner;
+		children[1] = loser;
 		return children;
 	}
 

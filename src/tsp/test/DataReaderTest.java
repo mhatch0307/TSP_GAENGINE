@@ -1,12 +1,5 @@
 package tsp.test;
 
-import tsp.actions.DataFactory;
-import tsp.actions.DataReader;
-import tsp.actions.crossers.RingCrosser;
-import tsp.actions.mutators.SwapMutator;
-import tsp.actions.selectors.RWSelector;
-import tsp.objects.populations.Population;
-
 public class DataReaderTest 
 {
 	public static void main(String args[])

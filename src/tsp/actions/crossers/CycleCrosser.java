@@ -1,23 +1,18 @@
 package tsp.actions.crossers;
 
-import java.util.Random;
-
 import tsp.actions.DataFactory;
 import tsp.objects.chromosomes.Chromosome;
 
 public class CycleCrosser implements Crosser
 {
 	//Private Members
-	private float probability; 
-	private Random random;
 	private Chromosome child1;
 	private Chromosome child2;
 	
 	//Constructors
-	public CycleCrosser(float probability) 
+	public CycleCrosser() 
 	{
-		this.probability = probability;
-		this.random = new Random();
+
 	}
 
 	//Getters
@@ -28,70 +23,61 @@ public class CycleCrosser implements Crosser
 	@Override
 	public Chromosome[] cross(Chromosome parent1, Chromosome parent2) throws Exception 
 	{
-		//parent1.display();
-		//parent2.display();
+		int chromosomeSize = parent1.getSize();
+		double[][] distanceIndex = parent1.getDistanceIndex();
+		double[][] verticies = parent1.getVerticies();
 		
-		if(this.random.nextFloat() <= this.probability)
-		{
-			int chromosomeSize = parent1.getSize();
-			double[][] distanceIndex = parent1.getDistanceIndex();
-			double[][] verticies = parent1.getVerticies();
+		this.child1 = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex, verticies);
+		this.child2 = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex, verticies);
+		
+		int[] cycles = new int[chromosomeSize];
+		
+		int destinationsUsed = 0;
+		int cycleCount = 0;
+		int startIndex = 0;
+		
+		while(destinationsUsed < chromosomeSize)
+		{				
+			while(cycles[startIndex] > 0) // find the first index not in a cycle
+				startIndex++;
 			
-			this.child1 = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex, verticies);
-			this.child2 = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex, verticies);
+			// find a cycle
+			cycleCount++;
+			int startValue = parent1.getDestination(startIndex);
+			int currentIndex = startIndex;
+			int currentValue = parent2.getDestination(currentIndex);
+			cycles[currentIndex] = cycleCount;
 			
-			int[] cycles = new int[chromosomeSize];
+			updateDestinations(cycleCount, currentIndex,
+					startValue, 
+					currentValue);
+			destinationsUsed++;
 			
-			int destinationsUsed = 0;
-			int cycleCount = 0;
-			int startIndex = 0;
-			
-			while(destinationsUsed < chromosomeSize)
-			{				
-				while(cycles[startIndex] > 0) // find the first index not in a cycle
-					startIndex++;
-				
-				// find a cycle
-				cycleCount++;
-				int startValue = parent1.getDestination(startIndex);
-				int currentIndex = startIndex;
-				int currentValue = parent2.getDestination(currentIndex);
+			while(currentValue != startValue)
+			{		
+				currentIndex = parent1.indexOf(currentValue);
 				cycles[currentIndex] = cycleCount;
+				currentValue = parent2.getDestination(currentIndex);
 				
 				updateDestinations(cycleCount, currentIndex,
-						startValue, 
-						currentValue);
-				destinationsUsed++;
+									parent1.getDestination(currentIndex), 
+									currentValue);
 				
-				while(currentValue != startValue)
-				{		
-					currentIndex = parent1.indexOf(currentValue);
-					cycles[currentIndex] = cycleCount;
-					currentValue = parent2.getDestination(currentIndex);
-					
-					updateDestinations(cycleCount, currentIndex,
-										parent1.getDestination(currentIndex), 
-										currentValue);
-					
-					destinationsUsed++;
-				}
+				destinationsUsed++;
 			}
-			
-			child1.calculateFitnessScore();
-			child2.calculateFitnessScore();
 		}
+		
+		child1.calculateFitnessScore();
+		child2.calculateFitnessScore();
+		
+		Chromosome children[] = DataFactory.createNewChromosomeArray(parent1.populationType, 1);
+		
+		if(child1.getFitnessScore() > child2.getFitnessScore())
+			children[0] = child2;
 		else
-		{
-			this.child1 = parent1.copy();
-			this.child2 = parent2.copy();
-		}
+			children[0] = child1;
 		
-		Chromosome children[] = DataFactory.createNewChromosomeArray(parent1.populationType, 2);
-		
-		children[0] = child1;
-		children[1] = child2;
-		
-		return children;
+		return children;		
 	}
 	
 	//Private Methods

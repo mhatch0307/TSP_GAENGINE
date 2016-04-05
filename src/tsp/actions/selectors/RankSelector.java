@@ -1,7 +1,5 @@
 package tsp.actions.selectors;
 
-import tsp.objects.chromosomes.Chromosome;
-
 public class RankSelector extends Selector 
 {
 	
@@ -16,10 +14,9 @@ public class RankSelector extends Selector
 	public String getDescription() { return "Rank"; }
 	
 	//Public Methods
-	public Chromosome select()
+	public int select()
 	{
 		double mostOptimalIndexScore = 999999;
-		Chromosome mostOptimalChromosome = null;
 		int mostOptimalChromosomeIndex = 0;
 		for(int i = 0; i < this.numChromosomes; i++)
 		{
@@ -30,11 +27,7 @@ public class RankSelector extends Selector
 			}
 		}
 		
-		mostOptimalChromosome = this.chromosomes.get(mostOptimalChromosomeIndex);
-		this.chromosomes.remove(mostOptimalChromosomeIndex);
-		this.numChromosomes--;
-		
-		return mostOptimalChromosome;
+		return mostOptimalChromosomeIndex;
 	}
 	
 }

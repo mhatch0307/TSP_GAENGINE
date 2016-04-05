@@ -10,11 +10,12 @@ public abstract class Selector
 	protected List<Chromosome> chromosomes;
 	protected double totalFitnessScore;
 	protected int numChromosomes;
+	protected double mostOptimalScore;
 	
 	//Constructors
 	public Selector()
 	{
-		this.totalFitnessScore = 0;
+		
 	}
 	
 	//Getters
@@ -22,29 +23,31 @@ public abstract class Selector
 	public abstract String getDescription();
 	
 	//Setters
-	public void setChromosomes(List<Chromosome> chromosomes) 
+	public void setChromosomes(List<Chromosome> chromosomes, double mostOptimalScore) 
 	{ 
 		this.chromosomes = chromosomes; 
 		this.numChromosomes = chromosomes.size();
+		this.mostOptimalScore = mostOptimalScore * .9;
 		this.sumFitnessValues();
 	}
 
 	//Public Methods
-	public abstract Chromosome select();
+	public abstract int select();
 	
 	public void sumFitnessValues()
 	{
+		this.totalFitnessScore = 0;
 		for(Chromosome chromosome : chromosomes)
 		{
-			this.totalFitnessScore += chromosome.getFitnessScore();
+			this.totalFitnessScore += (chromosome.getFitnessScore() - mostOptimalScore);
 		}
 	}
 	
 	// removes the element in the specified index from this.chromosomes
 	public void remove(int index)
 	{
-		this.numChromosomes--;
-		this.totalFitnessScore -= this.chromosomes.get(index).getFitnessScore();
-		this.chromosomes.remove(index);
+		//this.numChromosomes--;
+		//this.totalFitnessScore -= this.chromosomes.get(index).getFitnessScore();
+		//this.chromosomes.remove(index);
 	}
 }

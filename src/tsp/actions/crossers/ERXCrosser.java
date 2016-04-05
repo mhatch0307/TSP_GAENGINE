@@ -5,21 +5,21 @@ import java.util.List;
 import java.util.Random;
 
 import tsp.actions.DataFactory;
+import tsp.actions.MyRandom;
 import tsp.objects.chromosomes.Chromosome;
 
 public class ERXCrosser implements Crosser
 {
 	//Private Members
-	private float probability; 
 	private Random random;
 	private int neighborListSize; 
 	private List<List<Integer>> neighborLists;
 	private List<Integer> remainingDestinations;
 	
 	//Constructors
-	public ERXCrosser(float probability) 
+	public ERXCrosser() 
 	{
-		random = new Random();
+		random = MyRandom.getInstance().random;
 	}
 	
 	@Override
@@ -29,75 +29,61 @@ public class ERXCrosser implements Crosser
 	@Override
 	public Chromosome[] cross(Chromosome parent1, Chromosome parent2) throws Exception 
 	{
-		Chromosome children[] = DataFactory.createNewChromosomeArray(parent1.populationType, 2);
+		Chromosome children[] = null;
+		Chromosome child1 = parent1.copy();
+		Chromosome child2 = parent2.copy();
 		
-		children[0] = this.runIteration(parent1, parent2);
-		children[1] = this.runIteration(parent1, parent2);
-		
+		children = DataFactory.createNewChromosomeArray(parent1.populationType, 2);
+		//System.out.println("Before: "); winner.display();
+		children[0] = this.runIteration(child1, child2);
+		//System.out.println("After: "); children[0].display();
+		children[1] = this.runIteration(child2, child1);
+	
 		return children;
 	}
 	
 	private Chromosome runIteration(Chromosome parent1, Chromosome parent2) throws Exception 
 	{
-		//parent1.display();
-		//parent2.display();
 		Chromosome child;
 		
-		if(this.random.nextFloat() <= this.probability)
-		{
-			int chromosomeSize = parent1.getSize();
-			double[][] distanceIndex = parent1.getDistanceIndex();	
-			double[][] verticies = parent1.getVerticies();
-			
-			// prep tracking for remaining destinations
-			this.remainingDestinations = new ArrayList<Integer>();
-			for(int i = 0; i < chromosomeSize; i++)
-				this.remainingDestinations.add(i);		
-			
-			this.generateNeighborList(parent1, parent2);
-			
-			//this.displayNeighborLists();
-			
-			child = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex, verticies);
-			
-			int destination = (random.nextInt(2) == 0)? parent1.getDestination(0) : parent2.getDestination(0);
-			
-			this.remainingDestinations.remove(this.remainingDestinations.indexOf(destination));
-			child.addDestination(destination);
-			removeFromNeighborList(destination);
-			
-			//System.out.println("First Destination: " + destination);
-			//child.display();
-			//this.displayNeighborLists();
+		int chromosomeSize = parent1.getSize();
+		double[][] distanceIndex = parent1.getDistanceIndex();	
+		double[][] verticies = parent1.getVerticies();
 		
-			while(!child.isFull())
-			{	
-				List<Integer> neighbors = this.neighborLists.get(destination);
-				if(neighbors.isEmpty())
-				{
-					int index = random.nextInt(this.remainingDestinations.size());
-					destination = this.remainingDestinations.get(index);	
-					this.remainingDestinations.remove(index);
-				}
-				else
-				{
-					destination = findFewestNeighborsIndex(neighbors);
-					remainingDestinations.remove(remainingDestinations.indexOf(destination));
-				}
-				//System.out.println("Destination: " + destination);
-				removeFromNeighborList(destination);
-				child.addDestination(destination);
-				//child.display();
-				//this.displayNeighborLists();
+		// prep tracking for remaining destinations
+		this.remainingDestinations = new ArrayList<Integer>();
+		for(int i = 0; i < chromosomeSize; i++)
+			this.remainingDestinations.add(i);		
+		
+		this.generateNeighborList(parent1, parent2);
+		
+		child = DataFactory.createNewChromosome(parent1.populationType, chromosomeSize, distanceIndex, verticies);
+		
+		int destination = (random.nextInt(2) == 0)? parent1.getDestination(0) : parent2.getDestination(0);
+		
+		this.remainingDestinations.remove(this.remainingDestinations.indexOf(destination));
+		child.addDestination(destination);
+		removeFromNeighborList(destination);
+	
+		while(!child.isFull())
+		{	
+			List<Integer> neighbors = this.neighborLists.get(destination);
+			if(neighbors.isEmpty())
+			{
+				int index = random.nextInt(this.remainingDestinations.size());
+				destination = this.remainingDestinations.get(index);	
+				this.remainingDestinations.remove(index);
 			}
-			
-			child.calculateFitnessScore();
-			//child.display();
+			else
+			{
+				destination = findFewestNeighborsIndex(neighbors);
+				remainingDestinations.remove(remainingDestinations.indexOf(destination));
+			}
+			removeFromNeighborList(destination);
+			child.addDestination(destination);
 		}
-		else
-		{
-			child = parent1.copy();
-		}
+		
+		child.calculateFitnessScore();
 		return child;
 	}
 	

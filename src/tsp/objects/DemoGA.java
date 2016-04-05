@@ -15,7 +15,6 @@ public class DemoGA extends GA
 	{
 		this.mostOptimalChromosome = this.population.getMostOptimalMember();
 		int numIterations = 0;
-		double previousFitnessScore = 0;
 		int previousNumDots = 0;
 		double startingFitnessScore = this.mostOptimalChromosome.getFitnessScore();
 		while(numIterations < this.endCriteria && this.population.getSize() > 2)
@@ -35,6 +34,7 @@ public class DemoGA extends GA
 			if(newFitnessScore < this.mostOptimalChromosome.getFitnessScore())
 			{
 				this.mostOptimalChromosome = newMostOptimal;
+				numIterations = 0;
 			}
 			else
 				numIterations++;
@@ -53,15 +53,14 @@ public class DemoGA extends GA
 				System.out.print("% ");
 				
 				newMostOptimal.display();
-				try {
-					Thread.sleep(200);
+				/*try {
+					Thread.sleep(5);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				}*/
 			}
 			previousNumDots = numDots;
-			previousFitnessScore = newFitnessScore;
 		}
 		//this.sendMostOptimalSolution();
 		//System.out.println(numIterations);

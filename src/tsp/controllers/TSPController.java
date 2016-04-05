@@ -3,13 +3,17 @@ package tsp.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import tsp.actions.DataFactory;
-import tsp.actions.GoogleMapsAPI;
+import tsp.actions.MapQuestAPI;
 import tsp.actions.TSPEngine;
 import tsp.actions.crossers.Crosser;
 import tsp.actions.mutators.Mutator;
 import tsp.actions.selectors.Selector;
 import tsp.objects.GA;
+import tsp.objects.TSPObject;
 import tsp.objects.chromosomes.Chromosome;
 import tsp.objects.populations.Population;
 import tsp.objects.populations.PopulationType;
@@ -20,7 +24,7 @@ public class TSPController
 	//Private Members
 	private static TSPController instance;
 	private Map<Integer, UserInterface> userInterfaces;
-	private static int lastUserInterfaceID = 0;
+	private int lastUserInterfaceID = 0;
 	
 	//Constructors
 	public TSPController()
@@ -38,23 +42,24 @@ public class TSPController
 	
 	public void startTSPEngine()
 	{
-		if(!TSPEngine.isRunning())
+		if(!TSPEngine.getInstance().isRunning())
+		{
 			TSPEngine.getInstance().startEngine();
+		}
 	}
 
 	public void stopTSPEngine()
 	{
-		if(TSPEngine.isRunning())
+		if(TSPEngine.getInstance().isRunning())
 		{
 			TSPEngine.getInstance().stopEngine();
-			//this.sendDisplayMessageToViews("TSP Engine stopped successfully.");
 		}
 	}
 	
 	public void addUserInterface(UserInterface userInterface)
 	{
-		userInterface.setInterfaceID(++TSPController.lastUserInterfaceID);
-		this.userInterfaces.put(TSPController.lastUserInterfaceID, userInterface);
+		userInterface.setInterfaceID(++TSPController.getInstance().lastUserInterfaceID);
+		this.userInterfaces.put(TSPController.getInstance().lastUserInterfaceID, userInterface);
 	}
 	
 	public void removeUserInterface(int index)
@@ -67,9 +72,20 @@ public class TSPController
 		UserInterface userInterface = this.userInterfaces.get(userInterfaceID);
 		userInterface.addSolution(solution);
 		userInterface.displayMessage("Optimal solution has been found!");
+		userInterface.refresh();
 	}
 	
-	public void addToQueue(double[][] distanceIndex, double[][] verticies, int size, int endCriteria, Crosser crosser, Mutator mutator, Selector selector, int populationType, int interfaceID)
+	public void addToQueue(double[][] distanceIndex, 
+						   double[][] verticies, 
+						   int size, 
+						   int endCriteria, 
+						   Crosser crosser, 
+						   Mutator mutator, 
+						   Selector selector, 
+						   int populationType, 
+						   float crossProbability, 
+						   float mutateProbability, 
+						   int interfaceID)
 	{
 		Population population;
 		try 
@@ -77,16 +93,18 @@ public class TSPController
 			switch(populationType)
 			{
 				case PopulationType.Symmetric:
-					population = DataFactory.createRandomSymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector, interfaceID);
+					population = DataFactory.createRandomSymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector, 
+							crossProbability, mutateProbability, interfaceID);
 					break;
 				case PopulationType.Asymmetric:
-					population = DataFactory.createRandomAsymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector, interfaceID);
+					population = DataFactory.createRandomAsymmetricPopulation(distanceIndex, verticies, size, crosser, mutator, selector,
+							crossProbability, mutateProbability, interfaceID);
 					break;
 				default:
 					throw new Exception("Invalid Population Type!");
 			}
 			GA ga = new GA(population, endCriteria);
-			TSPEngine.addToQueue(ga);
+			TSPEngine.getInstance().addToQueue(ga);
 			this.userInterfaces.get(interfaceID).displayMessage("Population added successfully!");
 		} 
 		catch (Exception e) 
@@ -98,10 +116,27 @@ public class TSPController
 		}
 	}
 	
-	public double[][] addressesToDistanceIndex(String[] addresses)
+	/*public TSPObject addressesToTSPObject(JSONArray addresses) throws JSONException
 	{
-		GoogleMapsAPI googleMapsAPI = new GoogleMapsAPI("json", "AIzaSyAIIGgX0htxhCBnOy6xk_7ZCOAPz3ntoSk");
-		double distanceIndex[][] = googleMapsAPI.getDistanceIndexAddress(addresses, addresses, "imperial");
-		return distanceIndex;
+		GoogleMapsAPI googleMapsAPI = new GoogleMapsAPI("json", "AIzaSyC0SfHXfKObjQ7BYUFPOrliBv4yHqnisUE");
+		double latLngs[][] = googleMapsAPI.getLatLngs(addresses);
+		double distanceIndex[][] = googleMapsAPI.getDistanceIndexLatLng(latLngs, latLngs, "imperial");
+		return new TSPObject(distanceIndex, latLngs);
+	}*/
+	
+	public TSPObject addressesToTSPObject(JSONArray addresses)
+	{
+		MapQuestAPI api = new MapQuestAPI("RN6BLpAaEsvbUBaCgRVJBChczCTgS134");
+		
+		try 
+		{
+			return api.getTSPProblem(addresses);
+		} 
+		catch (JSONException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
