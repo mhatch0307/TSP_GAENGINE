@@ -36,25 +36,17 @@ public class OXCrosser implements Crosser
 		int start = this.random.nextInt(size - (size / 4));
 		int length = this.random.nextInt((size / 4) - (size / 8)) + (size / 8) + 1;
 		
-		Chromosome winner = null;
-		Chromosome loser = null;
-		
-		if(parent1.getFitnessScore() > parent2.getFitnessScore())
-		{
-			winner = parent2;
-			loser = parent1;
-		}
-		else
-		{
-			winner = parent1;
-			loser = parent2;
-		}
+		Chromosome child1 = parent2.copy();
+		Chromosome child2 = parent1.copy();
 	
-		this.swapSection(loser, winner, start, length);
-		this.swapSection(winner, loser, start, length);
-		Chromosome children[] = DataFactory.createNewChromosomeArray(parent1.populationType, 2);
-		children[0] = winner;
-		children[1] = loser;
+		this.swapSection(parent2, child1, start, length);
+		this.swapSection(parent1, child2, start, length);
+		
+		Chromosome children[] = DataFactory.createNewChromosomeArray(parent1.populationType, 1);
+		
+		children[0] = child1;
+		children[1] = child2;
+		
 		return children;
 	}
 
@@ -62,9 +54,7 @@ public class OXCrosser implements Crosser
 	private void swapSection(Chromosome chromosome1, Chromosome chromosome2, int start, int length) throws Exception
 	{
 		int[] swapSection = chromosome1.getSubsection(start, length);
-		
 		chromosome2.removeElementsInSection(swapSection);
-		
 		chromosome2.slide(start, swapSection);
 	}
 	

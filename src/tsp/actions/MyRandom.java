@@ -10,7 +10,7 @@ public class MyRandom {
 	public MyRandom()
 	{
 		this.random = new Random();
-		this.random.setSeed(System.nanoTime());
+		//this.random.setSeed(System.nanoTime());
 	}
 	
 	public static MyRandom getInstance()

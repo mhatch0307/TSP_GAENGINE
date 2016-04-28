@@ -16,7 +16,7 @@ public class RankSelector extends Selector
 	//Public Methods
 	public int select()
 	{
-		double mostOptimalIndexScore = 999999;
+		/*double mostOptimalIndexScore = 999999;
 		int mostOptimalChromosomeIndex = 0;
 		for(int i = 0; i < this.numChromosomes; i++)
 		{
@@ -27,7 +27,8 @@ public class RankSelector extends Selector
 			}
 		}
 		
-		return mostOptimalChromosomeIndex;
+		return mostOptimalChromosomeIndex;*/
+		return 0;
 	}
 	
 }

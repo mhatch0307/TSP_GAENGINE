@@ -20,6 +20,7 @@ public class GA extends Thread
 	
 	//Getters
 	public Population getPopulation() { return this.population; }
+	public Chromosome getMostOptimalSolution() { return this.mostOptimalChromosome; }
 	
 	//Public Methods
 	public void run()

@@ -6,8 +6,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mxgraph.view.mxGraph;
-
 import tsp.actions.crossers.Crosser;
 import tsp.actions.mutators.Mutator;
 import tsp.actions.selectors.Selector;
@@ -135,18 +133,6 @@ public class DataFactory
 	{
 		return null;
 	}*/
-	
-	public static Destination[] GraphToPE(mxGraph graph)
-	{
-		return null;
-	}
-	
-	public static mxGraph ChromosomeToGraph(Chromosome chromosome)
-	{
-		mxGraph graph = new mxGraph();
-	
-		return graph;
-	}
 	
 	/*public static mxGraph XMLToGraph(String XML)
 	{

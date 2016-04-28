@@ -7,7 +7,7 @@ import tsp.objects.chromosomes.Chromosome;
 public abstract class Selector 
 {
 	//Private Members
-	protected List<Chromosome> chromosomes;
+	protected Chromosome chromosomes[];
 	protected double totalFitnessScore;
 	protected int numChromosomes;
 	protected double mostOptimalScore;
@@ -23,10 +23,10 @@ public abstract class Selector
 	public abstract String getDescription();
 	
 	//Setters
-	public void setChromosomes(List<Chromosome> chromosomes, double mostOptimalScore) 
+	public void setChromosomes(Chromosome chromosomes[], double mostOptimalScore) 
 	{ 
 		this.chromosomes = chromosomes; 
-		this.numChromosomes = chromosomes.size();
+		this.numChromosomes = chromosomes.length;
 		this.mostOptimalScore = mostOptimalScore * .9;
 		this.sumFitnessValues();
 	}
@@ -37,9 +37,9 @@ public abstract class Selector
 	public void sumFitnessValues()
 	{
 		this.totalFitnessScore = 0;
-		for(Chromosome chromosome : chromosomes)
+		for(int i = 0; i < this.chromosomes.length; i++)
 		{
-			this.totalFitnessScore += (chromosome.getFitnessScore() - mostOptimalScore);
+			this.totalFitnessScore += (chromosomes[i].getFitnessScore() - mostOptimalScore);
 		}
 	}
 	

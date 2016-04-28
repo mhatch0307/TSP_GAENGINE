@@ -135,7 +135,7 @@ public class TSPController
 		catch (JSONException e)
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return null;
 	}

@@ -30,11 +30,11 @@ public class RWSelector extends Selector
 		
 		double currentFitness = 0;
 		
-		int size = this.chromosomes.size();
+		int size = this.chromosomes.length;
 		
 		for(int i = 0; i < size; i++)
 		{
-			currentFitness += (this.totalFitnessScore - (this.chromosomes.get(i).getFitnessScore() - this.mostOptimalScore));
+			currentFitness += (this.totalFitnessScore - (this.chromosomes[i].getFitnessScore() - this.mostOptimalScore));
 			if(currentFitness >= stop)
 				return i;
 		}

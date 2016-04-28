@@ -13,13 +13,14 @@ public class DataTranslatorTest
 	public static void main(String[] args)
 	{
 		
-		//String filePath = "/Users/matthew/Documents/TSP/TSPProblems/ulysses16.xml";
 		//String filePath = "/Users/matthew/Documents/TSP/TSPProblems/ulysses22.xml";
+		//String filePath = "/Users/matthew/Documents/TSP/TSPProblems/medium/kroA100.xml";
 		//String filePath = "/Users/matthew/Documents/TSP/TSPProblems/fnl4461.xml";
-		String filePath =  "/Users/matthew/Documents/TSP/TSPProblems/a280.xml";
+		//String filePath =  "/Users/matthew/Documents/TSP/TSPProblems/a280.xml";
 		//String filePath =  "/Users/matthew/Documents/TSP/TSPProblems/att532.xml";
 		//String filePath =  "/Users/matthew/Documents/TSP/TSPProblems/berlin52.xml";
-		//String filePath =  "/Users/matthew/Documents/TSP/TSPProblems/rat99.xml";
+		//String filePath = "/Users/matthew/Documents/TSP/TSPProblems/large/pr136.xml";
+		String filePath =  "/Users/matthew/Documents/TSP/TSPProblems/rat99.xml";
 		
 		
 		double[][] distanceIndex;

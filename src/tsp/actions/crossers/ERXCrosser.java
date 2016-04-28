@@ -33,11 +33,9 @@ public class ERXCrosser implements Crosser
 		Chromosome child1 = parent1.copy();
 		Chromosome child2 = parent2.copy();
 		
-		children = DataFactory.createNewChromosomeArray(parent1.populationType, 2);
-		//System.out.println("Before: "); winner.display();
+		children = DataFactory.createNewChromosomeArray(parent1.populationType, 1);
 		children[0] = this.runIteration(child1, child2);
-		//System.out.println("After: "); children[0].display();
-		children[1] = this.runIteration(child2, child1);
+		//children[1] = this.runIteration(child2, child1);
 	
 		return children;
 	}
@@ -63,7 +61,7 @@ public class ERXCrosser implements Crosser
 		
 		this.remainingDestinations.remove(this.remainingDestinations.indexOf(destination));
 		child.addDestination(destination);
-		removeFromNeighborList(destination);
+		this.removeFromNeighborList(destination);
 	
 		while(!child.isFull())
 		{	
@@ -79,7 +77,7 @@ public class ERXCrosser implements Crosser
 				destination = findFewestNeighborsIndex(neighbors);
 				remainingDestinations.remove(remainingDestinations.indexOf(destination));
 			}
-			removeFromNeighborList(destination);
+			this.removeFromNeighborList(destination);
 			child.addDestination(destination);
 		}
 		

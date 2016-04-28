@@ -142,7 +142,9 @@ public class Population
 	{
 		Chromosome selectChromosomes[] = DataFactory.createNewChromosomeArray(this.populationType, this.chromosomes.length);
 		System.arraycopy(this.chromosomes, 0, selectChromosomes, 0, this.chromosomes.length);
-		this.selector.setChromosomes(new ArrayList<Chromosome>(Arrays.asList(this.chromosomes)), this.chromosomes[this.mostOptimalMemberIndex].getFitnessScore());
+		//this.selector.setChromosomes(new ArrayList<Chromosome>(Arrays.asList(this.chromosomes)), this.chromosomes[this.mostOptimalMemberIndex].getFitnessScore());
+		
+		this.selector.setChromosomes(this.chromosomes, this.chromosomes[this.mostOptimalMemberIndex].getFitnessScore());
 		
 		Chromosome[] newPopulation = DataFactory.createNewChromosomeArray(this.populationType, this.chromosomes.length);
 		
@@ -205,7 +207,6 @@ public class Population
 					newPopulation[chromosomeIndex++] = children[j];
 			}
 		}
-
 		this.chromosomes = newPopulation;
 	}
 	
