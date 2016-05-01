@@ -1,7 +1,5 @@
 package tsp.actions.selectors;
 
-import java.util.List;
-
 import tsp.objects.chromosomes.Chromosome;
 
 public abstract class Selector 
@@ -41,13 +39,5 @@ public abstract class Selector
 		{
 			this.totalFitnessScore += (chromosomes[i].getFitnessScore() - mostOptimalScore);
 		}
-	}
-	
-	// removes the element in the specified index from this.chromosomes
-	public void remove(int index)
-	{
-		//this.numChromosomes--;
-		//this.totalFitnessScore -= this.chromosomes.get(index).getFitnessScore();
-		//this.chromosomes.remove(index);
 	}
 }

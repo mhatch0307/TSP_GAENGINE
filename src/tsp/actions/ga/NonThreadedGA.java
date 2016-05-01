@@ -1,4 +1,4 @@
-package tsp.objects;
+package tsp.actions.ga;
 
 import tsp.objects.chromosomes.Chromosome;
 import tsp.objects.populations.Population;
@@ -31,7 +31,7 @@ public class NonThreadedGA
 		while(numIterations < this.endCriteria)
 		{
 			try {
-				this.population.generateOffSpring();
+				this.population.evolve();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();

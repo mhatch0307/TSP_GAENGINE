@@ -9,7 +9,6 @@ import java.util.List;
 import tsp.actions.crossers.Crosser;
 import tsp.actions.mutators.Mutator;
 import tsp.actions.selectors.Selector;
-import tsp.objects.Destination;
 import tsp.objects.chromosomes.AsymmetricChromosome;
 import tsp.objects.chromosomes.Chromosome;
 import tsp.objects.chromosomes.SymmetricChromosome;
@@ -30,6 +29,8 @@ public class DataFactory
 	 */
 	public static double[][] XMLToDistanceIndex(String XMLFilePath) throws Exception
 	{
+		//TODO:Generalilze to work with any XML file...parse it properly
+		
 		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(XMLFilePath));
 		
@@ -129,27 +130,7 @@ public class DataFactory
 		return distanceIndex;
 	}
 	
-	/*public static String PEToXML(Destination[][] destinations)
-	{
-		return null;
-	}*/
-	
-	/*public static mxGraph XMLToGraph(String XML)
-	{
-		return null;
-	}
-	
-	public static String GraphToXML(mxGraph graph)
-	{
-		return null;
-	}*/
-	
-	// Helper Functions
-	
-	public static int getTSPSize(BufferedReader reader)
-	{
-		return 0;
-	}
+	// Helper Methods
 	
 	public static Population createRandomSymmetricPopulation(double[][] distanceIndex, double[][] verticies, int size, 
 			Crosser crosser, Mutator mutator, Selector selector, float crossProbability, float mutateProbability, int interfaceID) throws Exception

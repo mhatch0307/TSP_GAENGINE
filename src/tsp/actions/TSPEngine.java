@@ -3,8 +3,8 @@ package tsp.actions;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import tsp.actions.ga.GA;
 import tsp.controllers.TSPController;
-import tsp.objects.GA;
 import tsp.objects.chromosomes.Chromosome;
 
 public class TSPEngine extends Thread

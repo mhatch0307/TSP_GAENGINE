@@ -1,4 +1,4 @@
-package tsp.objects;
+package tsp.actions.ga;
 
 import tsp.objects.chromosomes.Chromosome;
 import tsp.objects.populations.Population;
@@ -20,7 +20,7 @@ public class DemoGA extends GA
 		while(numIterations < this.endCriteria && this.population.getSize() > 2)
 		{
 			try {
-				this.population.generateOffSpring();
+				this.population.evolve();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

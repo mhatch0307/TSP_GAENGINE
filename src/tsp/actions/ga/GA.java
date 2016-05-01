@@ -1,4 +1,4 @@
-package tsp.objects;
+package tsp.actions.ga;
 
 import tsp.actions.TSPEngine;
 import tsp.objects.chromosomes.Chromosome;
@@ -31,7 +31,7 @@ public class GA extends Thread
 		while(numIterations < this.endCriteria)
 		{
 			try {
-				this.population.generateOffSpring();
+				this.population.evolve();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

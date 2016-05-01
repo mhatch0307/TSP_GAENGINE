@@ -10,9 +10,9 @@ import tsp.actions.DataFactory;
 import tsp.actions.MapQuestAPI;
 import tsp.actions.TSPEngine;
 import tsp.actions.crossers.Crosser;
+import tsp.actions.ga.GA;
 import tsp.actions.mutators.Mutator;
 import tsp.actions.selectors.Selector;
-import tsp.objects.GA;
 import tsp.objects.TSPObject;
 import tsp.objects.chromosomes.Chromosome;
 import tsp.objects.populations.Population;
@@ -116,17 +116,9 @@ public class TSPController
 		}
 	}
 	
-	/*public TSPObject addressesToTSPObject(JSONArray addresses) throws JSONException
+	public TSPObject addressesToTSPObject(JSONArray addresses, String APIKey)
 	{
-		GoogleMapsAPI googleMapsAPI = new GoogleMapsAPI("json", "AIzaSyC0SfHXfKObjQ7BYUFPOrliBv4yHqnisUE");
-		double latLngs[][] = googleMapsAPI.getLatLngs(addresses);
-		double distanceIndex[][] = googleMapsAPI.getDistanceIndexLatLng(latLngs, latLngs, "imperial");
-		return new TSPObject(distanceIndex, latLngs);
-	}*/
-	
-	public TSPObject addressesToTSPObject(JSONArray addresses)
-	{
-		MapQuestAPI api = new MapQuestAPI("RN6BLpAaEsvbUBaCgRVJBChczCTgS134");
+		MapQuestAPI api = new MapQuestAPI(APIKey);
 		
 		try 
 		{

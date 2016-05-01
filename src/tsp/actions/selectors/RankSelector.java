@@ -16,18 +16,7 @@ public class RankSelector extends Selector
 	//Public Methods
 	public int select()
 	{
-		/*double mostOptimalIndexScore = 999999;
-		int mostOptimalChromosomeIndex = 0;
-		for(int i = 0; i < this.numChromosomes; i++)
-		{
-			if(this.chromosomes.get(i).getFitnessScore() < mostOptimalIndexScore)
-			{
-				mostOptimalChromosomeIndex = i;
-				mostOptimalIndexScore = this.chromosomes.get(i).getFitnessScore();
-			}
-		}
-		
-		return mostOptimalChromosomeIndex;*/
+		//TODO: Implement
 		return 0;
 	}
 	
